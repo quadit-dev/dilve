@@ -1,0 +1,31 @@
+codigo,descripcion,vender,comprar,web
+1,Cancelado después de haber sido anunciado,0,0,0
+9,No disponible todavía. pospuesto indefinidamente,0,0,0
+10,No disponible todavía. Se debe indicar fecha prevista de disponibilidad.,0,0,0
+11,En espera de stock. Requiere una fecha prevista. Se utiliza fundamentalmente para pedidos al extranjero.,0,0,0
+12,No disponible todavía. Se publicará solo en impresión bajo demanda (POD).,0,0,0
+20,Disponible. Sin especificar detalles.,1,1,1
+21,Disponibilidad inmediata. En stock.,1,1,1
+22,Disponible. aunque sin existencias. Bajo pedido especial.,1,1,1
+23,Disponible. pero producido bajo demanda.,1,1,1
+30,Temporalmente no disponible. sin especificar razón. Requiere una fecha.,0,0,0
+31,Temporalmente no disponible por falta de existencias. Requiere una fecha.,0,0,0
+32,Temporalmente no disponible. En curso de reimpresión. Requiere una fecha.,1,1,1
+33,Temporalmente no disponible. A la espera de reedición,1,1,1
+34,Temporalmente retirado de la venta,0,0,0
+40,No disponible. sin especificar razón.,0,0,0
+41,No disponible. Sustituido por un nuevo producto.,0,0,0
+42,No disponible en este formato pero sí en otro.,0,0,0
+43,Ya no se suministra por nosotros.,0,0,0
+44,Contactar directamente a la editorial,0,0,0
+45,No se vende por separado. Debe ser comprado como parte de obra completa.,0,0,0
+46,Retirado de la venta (en general por razones legales o similares),0,0,0
+47,Destinado al mercado de saldos (Remaindered),0,0,0
+48,Agotado. sustituido por POD,0,0,0
+49,Retirado por seguridad del consumidor (EE.UU.),0,0,0
+50,No se vende como obra completa,0,0,0
+51,No disponible. La editorial ha indicado que está agotado.,0,0,0
+52,No disponible. La editorial ya no vende el producto en este mercado.,0,0,0
+97,No se ha recibido actualización reciente,0,0,0
+98,Ya no se reciben actualizaciones,0,0,0
+99,Desconocida,0,0,0

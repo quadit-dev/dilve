@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_codigos_disponibilidad,access.codigos.disponibilidad,model_codigos_disponibilidad,dilveapi.group_manager_dilveapi,1,1,1,0
+access_codigos_editoriales,access.codigos.editoriales,model_codigos_editoriales,dilveapi.group_manager_dilveapi,1,1,1,0
+access_record_status,access.record.status,model_record_status,dilveapi.group_manager_dilveapi,1,1,1,0
+access_management_modifications,access.management.modifications,model_management_modifications,dilveapi.group_manager_dilveapi,1,1,1,0
+access_deleted_records,access.deleted.records,model_deleted_records,dilveapi.group_manager_dilveapi,1,1,1,0
+access_config_usuario,access.config.usuario,model_config_usuario,dilveapi.group_manager_dilveapi,1,1,1,0
+access_ws_datos,access.ws.datos,model_ws_datos,dilveapi.group_manager_dilveapi,1,1,1,0
+access_ws_records,access.ws.records,model_ws_records,dilveapi.group_manager_dilveapi,1,1,1,0

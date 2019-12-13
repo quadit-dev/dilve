@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    	<!--CONFIGURACIÓN USUARIO DILVE-->
+		<record model="ir.ui.view" id="config_usuario_form">
+			<field name="name">config.usuario.form</field>
+			<field name="model">config.usuario</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Configuración de usuario">
+					<sheet>
+						<group colspan="4">
+							<field name="user"/>
+							<field name="password" password="True"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="tree_config_usuario">
+	        <field name="name">config.usuario.tree</field>
+	        <field name="model">config.usuario</field>
+	        <field name="type">tree</field>
+	        <field name="arch" type="xml">
+	            <tree string="Configuración de usuario">
+	            	<field name="user"/>
+	            </tree>
+	        </field>
+	    </record>
+
+	  	<record model="ir.actions.act_window" id="act_config_usuario">
+		    <field name="name">Configuración de usuario</field>
+		    <field name="res_model">config.usuario</field>
+		    <field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem id="id_config_usuario" 
+			parent="id_menu_configuracion" 
+			name="Configuración de usuario" 
+			action="act_config_usuario" sequence="2"/>
+    </data>
+</openerp>

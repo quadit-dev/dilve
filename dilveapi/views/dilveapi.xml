@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+	<!--VISTA GESTIÓN DE CONSULTAS -->
+	<record model="ir.ui.view" id="requests_modifications_form">
+		<field name="name">record.status.form</field>
+		<field name="model">record.status</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+			<form string="Consulta">
+				<sheet>
+					<group colspan="4">
+						<field name="create_date"/>
+						<field name="fromDate" placeholder="Indica el momento hasta el que se quiere el listado de cambios."/>
+						<field name="toDate" placeholder="Indica el momento hasta el que se quiere el listado de cambios."/>
+						<field name="requestType"/>
+						<field name="detail"/>
+						<field name="hyphens"/>
+						<field name="publisher" placeholder="Id de la editorial"/>
+						<field name="publishertype"/>
+						<field name="country" placeholder="Código del país"/>
+					</group>
+				</sheet>
+				<footer>
+					<center>
+                    	<button name="getData" string="Generar Solicitud" type="object"/>
+                    </center>
+                </footer>
+			</form>
+		</field>
+	</record>
+
+  	<record model="ir.ui.view" id="tree_requests_modifications">
+        <field name="name">record.status.tree</field>
+        <field name="model">record.status</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Consultas">
+            	<field name="create_date"/>
+            	<field name="fromDate"/>
+            	<field name="toDate"/>
+            	<field name="requestType"/>
+            	<field name="detail"/>
+            	<field name="hyphens"/>
+            	<field name="publisher"/>
+            	<field name="publishertype"/>
+            	<field name="country"/>
+            </tree>
+        </field>
+    </record>
+
+  	<record model="ir.actions.act_window" id="act_req_modifications">
+	    <field name="name">Gestión de consultas</field>
+	    <field name="res_model">record.status</field>
+	    <field name="view_mode">tree,form</field>
+	</record>
+
+	<!--VISTA LISTA DE LIBROS -->
+	<record model="ir.ui.view" id="record_modifications_form">
+		<field name="name">management.modifications.form</field>
+		<field name="model">management.modifications</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+			<form string="Libros">
+				<sheet>
+					<group colspan="4">
+						<field name="publication_date"/>
+						<field name="isbn"/>
+						<field name="title"/>
+						<field name="autor"/>
+						<field name="editorial"/>
+						<field name="url_image"/>
+						<field name="price_amount"/>
+						<field name="price_before_tax"/>
+						<field name="page_num"/>
+						<field name="height"/>
+						<field name="width"/>
+						<field name="thick"/>
+						<field name="weight"/>
+						<field name="edicion"/>
+						<field name="lugar_edicion"/>
+						<field name="other_text"/>
+						<field name="venta"/>
+						<field name="compra"/>
+						<field name="web"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="tree_modifications">
+        <field name="name">management.modifications.tree</field>
+        <field name="model">management.modifications</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Libros">
+				<field name="isbn"/>
+				<field name="title"/>
+				<field name="autor"/>
+				<field name="editorial"/>
+				<field name="publication_date"/>
+				<field name="url_image"/>
+				<field name="venta"/>
+				<field name="compra"/>
+				<field name="web"/>
+            </tree>
+        </field>
+    </record>
+
+	<record model="ir.actions.act_window" id="act_modifications">
+	    <field name="name">Libros</field>
+	    <field name="res_model">management.modifications</field>
+	    <field name="view_mode">tree,form</field>
+	</record>
+
+	<!--LISTA BAJAS DE LIBROS -->
+	<record model="ir.ui.view" id="deleted_records_tree">
+        <field name="name">deleted.records.tree</field>
+        <field name="model">deleted.records</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Libros cancelados">
+            	<field name="isbn"/>
+				<field name="title"/>
+				<field name="autor"/>
+				<field name="editorial"/>
+            </tree>
+        </field>
+    </record>
+
+	<record model="ir.actions.act_window" id="act_deleted">
+	    <field name="name">Libros cancelados</field>
+	    <field name="res_model">deleted.records</field>
+	    <field name="view_mode">tree</field>
+	</record>
+
+	<!--LISTA DE EDITORIALES-->
+	<record model="ir.ui.view" id="codigos_editoriales_form">
+		<field name="name">codigos.editoriales.form</field>
+		<field name="model">codigos.editoriales</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+			<form string="Lista de editoriales">
+				<sheet>
+					<group colspan="4">
+						<field name="nombre"/>
+						<field name="codigo"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="tree_codigos_editoriales">
+        <field name="name">codigos.editoriales.tree</field>
+        <field name="model">codigos.editoriales</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Lista de editoriales">
+            	<field name="nombre"/>
+            	<field name="codigo"/>
+            </tree>
+        </field>
+    </record>
+
+  	<record model="ir.actions.act_window" id="act_codigos_editoriales">
+	    <field name="name">Lista de editoriales</field>
+	    <field name="res_model">codigos.editoriales</field>
+	    <field name="view_mode">tree,form</field>
+	</record>
+
+	<!--CÓDIGOS DE DISPONIBILIDAD-->
+	<record model="ir.ui.view" id="codigos_disponibilidad_form">
+		<field name="name">codigos.disponibilidad.form</field>
+		<field name="model">codigos.disponibilidad</field>
+		<field name="type">form</field>
+		<field name="arch" type="xml">
+			<form string="Códigos de disponibilidad">
+				<sheet>
+					<group colspan="4">
+						<field name="codigo"/>
+						<field name="descripcion"/>
+						<field name="vender"/>
+						<field name="comprar"/>
+						<field name="web"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.ui.view" id="tree_codigos_disponibilidad">
+        <field name="name">codigos.disponibilidad.tree</field>
+        <field name="model">codigos.disponibilidad</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Códigos de disponibilidad">
+            	<field name="codigo"/>
+				<field name="descripcion"/>
+				<field name="vender"/>
+				<field name="comprar"/>
+				<field name="web"/>
+            </tree>
+        </field>
+    </record>
+
+  	<record model="ir.actions.act_window" id="act_codigos_disponibilidad">
+	    <field name="name">Códigos de disponibilidad</field>
+	    <field name="res_model">codigos.disponibilidad</field>
+	    <field name="view_mode">tree,form</field>
+	</record>
+
+	<!--MENU PRINCIPAL -->
+  	<menuitem id="id_principal_dilve" name="Dilve"/>
+
+  	<!--MENU DE SOLICITUDES -->
+	<menuitem id="id_menu_request_management" 
+		parent="id_principal_dilve" 
+		name="Gestión de consultas" sequence="0"/>
+
+	<menuitem id="id_menu_existence_request" 
+		parent="id_menu_request_management"
+		name="Consultas" 
+		action="act_req_modifications" sequence="0"/>
+
+	<!--MENU DE GESTION DE RECURSOS -->
+	<menuitem id="id_menu_resource_management" 
+		parent="id_principal_dilve" 
+		name="Gestión de recursos" sequence="1"/>
+
+	<menuitem id="id_menu_modifications" 
+		parent="id_menu_resource_management" 
+		name="Lista de libros" 
+		action="act_modifications" sequence="1"/>
+
+	<menuitem id="id_menu_deleted" 
+		parent="id_menu_resource_management" 
+		name="Libros cancelados" 
+		action="act_deleted" sequence="2"/>
+
+	<!--MENU DE CONFIGURACIÓN-->
+	<menuitem id="id_menu_configuracion" 
+		parent="id_principal_dilve" 
+		name="Configuración" sequence="3"/>
+
+	<menuitem id="id_codigos_editoriales" 
+		parent="id_menu_configuracion" 
+		name="Lista de Editoriales" 
+		action="act_codigos_editoriales" sequence="0"/>
+
+	<menuitem id="id_codigos_disponibilidad" 
+		parent="id_menu_configuracion" 
+		name="Codigos de  disponibilidad" 
+		action="act_codigos_disponibilidad" sequence="1"/>
+
+  </data>
+</odoo>
