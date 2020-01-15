@@ -51,6 +51,8 @@ class record_status(models.Model):
 
 	@api.multi
 	def getData(self):
+		if self.fromDate==Date.today():
+			raise Warning('[-] Seleccione una fecha diferente')
 		fDate = self.fromDate.split(' ')
 		newFromDate = str(fDate[0]) + "T" + str(fDate[1]) + "Z"
 		if self.toDate:
