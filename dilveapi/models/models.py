@@ -51,12 +51,16 @@ class record_status(models.Model):
 
 	@api.multi
 	def getData(self):
-		if self.fromDate==Date.today():
-			raise Warning('[-] Seleccione una fecha diferente')
 		fDate = self.fromDate.split(' ')
 		newFromDate = str(fDate[0]) + "T" + str(fDate[1]) + "Z"
 		if self.toDate:
 			tDate = self.toDate.split(' ')
+			formato = "%Y-%m-%d"
+			date = datetime.today()
+			deadline = datetime.strptime(tDate[0], formato)
+			diferencia = date - deadline
+			if diferencia.days==0:
+				raise Warning('[-] Seleccione una fecha de termino diferente')
 			newToDate = str(tDate[0])
 		else:
 			newToDate = None
