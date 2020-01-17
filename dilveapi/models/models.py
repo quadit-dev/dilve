@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from openerp import models, fields, api, tools
+from openerp.exceptions import UserError, ValidationError, Warning
 import requests
 from xml.dom.minidom import parse, parseString
 from xml.dom import minidom
