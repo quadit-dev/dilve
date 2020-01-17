@@ -11,6 +11,9 @@ from StringIO import StringIO
 from datetime import datetime
 import base64
 import validators
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class codigos_disponibilidad(models.Model):
 	_name = 'codigos.disponibilidad'
@@ -60,6 +63,10 @@ class record_status(models.Model):
 			deadline = datetime.strptime(tDate[0], formato)
 			diferencia = date - deadline
 			if diferencia.days==0:
+				_logger.info("===============>Entra al if")
+				_logger.info("===============>diferencia %r" % str(diferencia.days))
+				_logger.info("===============>deadline %r" % str(deadline))
+				_logger.info("===============>date %r" % str(date))
 				raise Warning('[-] Seleccione una fecha de termino diferente')
 			newToDate = str(tDate[0])
 		else:
