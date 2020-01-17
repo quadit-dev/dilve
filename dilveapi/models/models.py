@@ -67,7 +67,7 @@ class record_status(models.Model):
 				_logger.info("===============>diferencia %r" % str(diferencia.days))
 				_logger.info("===============>deadline %r" % str(deadline))
 				_logger.info("===============>date %r" % str(date))
-				raise Warning('[-] Seleccione una fecha de termino diferente')
+				raise Warning("[-] Seleccione una fecha de termino diferente")
 			newToDate = str(tDate[0])
 		else:
 			newToDate = None
