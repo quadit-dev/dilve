@@ -221,7 +221,7 @@ class record_status(models.Model):
                                     public_date = public_date.firstChild.data
                                     public_date = public_date + ' 06:00:00'
                                 else:
-                                    public_date = ""
+                                    public_date = False
                                 measures = dato.getElementsByTagName("MeasureTypeCode")
                                 m=0
                                 alto = ancho = grueso = peso = ""
@@ -252,6 +252,23 @@ class record_status(models.Model):
                                     lugar_edicion = lugar_edicion.firstChild.data
                                 else:
                                     lugar_edicion = ""
+                                _logger.info("===============>code %r" % code)
+                                _logger.info("===============>titulo %r" % titulo)
+                                _logger.info("===============>precio %r" % precio)
+                                _logger.info("===============>precioSIVA %r" % precioSIVA)
+                                _logger.info("===============>autorD %r" % autorD)
+                                _logger.info("===============>editorialD %r" % editorialD)
+                                _logger.info("===============>num_pag %r" % num_pag)
+                                _logger.info("===============>descripcion %r" % descripcion)
+                                _logger.info("===============>img %r" % img)
+                                _logger.info("===============>disponibilidad %r" % disponibilidad)
+                                _logger.info("===============>public_date %r" % public_date)
+                                _logger.info("===============>alto %r" % alto)
+                                _logger.info("===============>ancho %r" % ancho)
+                                _logger.info("===============>grueso %r" % grueso)
+                                _logger.info("===============>peso %r" % peso)
+                                _logger.info("===============>num_edicion %r" % num_edicion)
+                                _logger.info("===============>lugar_edicion %r" % lugar_edicion)
                         record = self.env['management.modifications'].search([('isbn','=',code)])
                         if not record:
                             registro = record.create({
