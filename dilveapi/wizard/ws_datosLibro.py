@@ -151,7 +151,7 @@ class ws_datos(models.Model):
 					public_date = public_date.firstChild.data
 					public_date = public_date + ' 06:00:00'
 				else:
-					public_date = ""
+					public_date = False
 				measures = dato.getElementsByTagName("MeasureTypeCode")
 				m=0
 				alto = ancho = grueso = peso = ""

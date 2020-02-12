@@ -27,9 +27,11 @@ class codigos_disponibilidad(models.Model):
 
 class codigos_editoriales(models.Model):
     _name = 'codigos.editoriales'
+    _rec_name = 'nombre'
 
     nombre = fields.Char('Nombre', size=128)
     codigo = fields.Char('Código', size=12)
+    partner_id = fields.Many2one('res.partner', 'Proveedor')
 
 class record_status(models.Model):
     _name = 'record.status'
@@ -45,7 +47,9 @@ class record_status(models.Model):
                                     ('D','Fecha')], 'Detalle', default="N")
     hyphens = fields.Selection([('N','No'),
                                     ('Y','Si')], 'Guiones', default="N")
-    publisher = fields.Char('Editorial', size=128)
+    publisher = fields.Many2one(
+        'codigos.editoriales', 
+        'Editorial')
     publishertype = fields.Selection([('A','Autor/Editor'),
                                     ('E','Editorial'),
                                     ('ED','Editoriales DILVE'),
@@ -85,7 +89,8 @@ class record_status(models.Model):
         else:
             nHyphens = None
         if self.publisher:
-            nPublisher = self.publisher
+            _logger.info("===============>self.publisher %r" % self.publisher.codigo)
+            nPublisher = self.publisher.codigo
         else:
             nPublisher = None
         if self.publishertype:
@@ -417,7 +422,7 @@ class record_status(models.Model):
                     #public_date = datetime.strptime(public_date, '%Y%m%d')
                     public_date = public_date + ' 06:00:00'
                 else:
-                    public_date = ""
+                    public_date = False
                 dispo = dato.getElementsByTagName("ProductAvailability")
                 if dispo:
                     disp = dato.getElementsByTagName("ProductAvailability")[0]
