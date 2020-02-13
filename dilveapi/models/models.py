@@ -68,10 +68,6 @@ class record_status(models.Model):
             deadline = datetime.strptime(tDate[0], formato)
             diferencia = date - deadline
             if diferencia.days==0:
-                _logger.info("===============>Entra al if")
-                _logger.info("===============>diferencia %r" % str(diferencia.days))
-                _logger.info("===============>deadline %r" % str(deadline))
-                _logger.info("===============>date %r" % str(date))
                 raise Warning("[-] Seleccione una fecha de termino diferente")
             newToDate = str(tDate[0])
         else:
@@ -89,7 +85,6 @@ class record_status(models.Model):
         else:
             nHyphens = None
         if self.publisher:
-            _logger.info("===============>self.publisher %r" % self.publisher.codigo)
             nPublisher = self.publisher.codigo
         else:
             nPublisher = None
@@ -257,23 +252,6 @@ class record_status(models.Model):
                                     lugar_edicion = lugar_edicion.firstChild.data
                                 else:
                                     lugar_edicion = ""
-                                _logger.info("===============>code %r" % code)
-                                _logger.info("===============>titulo %r" % titulo)
-                                _logger.info("===============>precio %r" % precio)
-                                _logger.info("===============>precioSIVA %r" % precioSIVA)
-                                _logger.info("===============>autorD %r" % autorD)
-                                _logger.info("===============>editorialD %r" % editorialD)
-                                _logger.info("===============>num_pag %r" % num_pag)
-                                _logger.info("===============>descripcion %r" % descripcion)
-                                _logger.info("===============>img %r" % img)
-                                _logger.info("===============>disponibilidad %r" % disponibilidad)
-                                _logger.info("===============>public_date %r" % public_date)
-                                _logger.info("===============>alto %r" % alto)
-                                _logger.info("===============>ancho %r" % ancho)
-                                _logger.info("===============>grueso %r" % grueso)
-                                _logger.info("===============>peso %r" % peso)
-                                _logger.info("===============>num_edicion %r" % num_edicion)
-                                _logger.info("===============>lugar_edicion %r" % lugar_edicion)
                         record = self.env['management.modifications'].search([('isbn','=',code)])
                         if not record:
                             registro = record.create({
@@ -326,6 +304,17 @@ class record_status(models.Model):
                                 'image_medium':base64.encodestring(cover_image)
                             })
                         producto = product.create(product_dic)
+
+                        supplier = self.env['product.supplierinfo']
+                        seller = {
+                            'product_tmpl_id': int(producto),
+                            'name': int(self.publisher.partner_id),
+                            'delay': 1,
+                            'min_qty': 0.00,
+                            'price': precioSIVA
+                        }
+                        proveedor = supplier.create(seller)
+
 
         return {
             'type': 'ir.actions.act_window',
@@ -536,6 +525,16 @@ class record_status(models.Model):
                     'image_medium':base64.encodestring(cover_image)
                 })
             producto = product.update(product_dic)
+
+            supplier = self.env['product.supplierinfo']
+            seller = {
+                'product_tmpl_id': int(producto),
+                'name': int(self.publisher.partner_id),
+                'delay': 1,
+                'min_qty': 0.00,
+                'price': precioSIVA
+            }
+            proveedor = supplier.create(seller)
 
 class management_modifications(models.Model):
     _name = 'management.modifications'
