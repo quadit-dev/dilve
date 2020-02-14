@@ -235,16 +235,6 @@ class ws_datos(models.Model):
 				})
 			producto = product.update(product_dic)
 
-			supplier = self.env['product.supplierinfo']
-                seller = {
-                	'product_tmpl_id': int(producto),
-                	'name': int(self.publisher.partner_id),
-                	'delay': 1,
-                	'min_qty': 0.00,
-                	'price': precioSIVA
-                }
-                proveedor = supplier.create(seller)
-
 		return {
 			'type': 'ir.actions.act_window',
             'res_model': 'ws.datos',
