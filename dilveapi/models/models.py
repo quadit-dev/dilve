@@ -308,6 +308,10 @@ class record_status(models.Model):
                             })
                         producto = product.create(product_dic)
 
+                        _logger.info("===============>product_tmpl_id %r" % int(producto))
+                        _logger.info("===============>product_id %r" % int(producto))
+                        _logger.info("===============>name %r" % int(self.publisher.partner_id))
+                        _logger.info("===============>price %r" % precioSIVA)
                         supplier = self.env['product.supplierinfo']
                         seller = {
                             'product_tmpl_id': int(producto),
