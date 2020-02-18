@@ -31,7 +31,6 @@ class codigos_editoriales(models.Model):
 
     nombre = fields.Char('Nombre', size=128)
     codigo = fields.Char('Código', size=12)
-    partner_id = fields.Many2one('res.partner', 'Proveedor')
 
 class record_status(models.Model):
     _name = 'record.status'
@@ -306,17 +305,6 @@ class record_status(models.Model):
                                 'image_medium':base64.encodestring(cover_image)
                             })
                         producto = product.create(product_dic)
-
-                        supplier = self.env['product.supplierinfo']
-                        seller = {
-                            'product_tmpl_id': int(producto),
-                            'name': int(self.publisher.partner_id),
-                            'delay': 1,
-                            'min_qty': 0.00,
-                            'price': precioSIVA
-                        }
-                        proveedor = supplier.create(seller)
-
 
         return {
             'type': 'ir.actions.act_window',
