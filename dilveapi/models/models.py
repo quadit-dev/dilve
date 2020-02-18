@@ -31,6 +31,7 @@ class codigos_editoriales(models.Model):
 
     nombre = fields.Char('Nombre', size=128)
     codigo = fields.Char('Código', size=12)
+    partner_id = fields.Many2one('res.partner', 'Proveedor')
 
 class record_status(models.Model):
     _name = 'record.status'
@@ -287,6 +288,7 @@ class record_status(models.Model):
                             'purchase_ok':disponibilidad,
                             'website_published':disponibilidad,
                             ###Estructura para los datos en el menu variants
+                            'fecha_publicacion_ok':public_date,
                             'titulo_lang':titulo,
                             'autor':autorD,
                             'isbn_13':code,
@@ -305,6 +307,21 @@ class record_status(models.Model):
                                 'image_medium':base64.encodestring(cover_image)
                             })
                         producto = product.create(product_dic)
+
+                        supplier = self.env['product.supplierinfo']
+                        seller = {
+                            'product_tmpl_id': int(producto),
+                            'product_id': int(producto),
+                            'name': int(self.publisher.partner_id),
+                            'product_uom': 1,
+                            'sequence': 1,
+                            'company_id': 1,
+                            'qty': float('0.0'),
+                            'delay': 1,
+                            'min_qty': 0,
+                            'price': precioSIVA
+                        }
+                        proveedor = supplier.create(seller)
 
         return {
             'type': 'ir.actions.act_window',
@@ -499,6 +516,7 @@ class record_status(models.Model):
                 'purchase_ok':disponibilidad,
                 'website_published':disponibilidad,
                 ###Estructura para los datos en el menu variants
+                'fecha_publicacion_ok':public_date,
                 'titulo_lang':titulo,
                 'autor':autorD,
                 'isbn_13':code,

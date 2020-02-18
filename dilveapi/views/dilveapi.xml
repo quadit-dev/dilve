@@ -147,6 +147,7 @@
 					<group colspan="4">
 						<field name="nombre"/>
 						<field name="codigo"/>
+						<field name="partner_id"/>
 					</group>
 				</sheet>
 			</form>
@@ -161,6 +162,7 @@
             <tree string="Lista de editoriales">
             	<field name="nombre"/>
             	<field name="codigo"/>
+            	<field name="partner_id"/>
             </tree>
         </field>
     </record>
