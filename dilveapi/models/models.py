@@ -426,7 +426,10 @@ class record_status(models.Model):
                 if pdate:
                     public_date = dato.getElementsByTagName("PublicationDate")[0]
                     public_date = public_date.firstChild.data
-                    public_date = public_date + ' 06:00:00'
+                    public_date = public_date #+ ' 06:00:00'
+                    _logger.info("===============>public_date %r" % public_date)
+                    public_date = datetime.strptime(public_date, '%Y%m%d')
+                    _logger.info("===============>public_date 2 %r" % public_date)
                 else:
                     public_date = False
                 dispo = dato.getElementsByTagName("ProductAvailability")
