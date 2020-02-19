@@ -216,6 +216,7 @@ class ws_datos(models.Model):
 				'purchase_ok':disponibilidad,
 				'website_published':disponibilidad,
 				###Estructura para los datos en el menu variants
+				'fecha_publicacion_ok':public_date,
 				'titulo_lang':titulo,
 				'autor':autorD,
 				'isbn_13':code,
