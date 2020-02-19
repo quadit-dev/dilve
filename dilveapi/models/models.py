@@ -310,13 +310,14 @@ class record_status(models.Model):
 
                         prov = self.publisher.partner_id
                         if prov:
+                            product_template = self.env['product.template'].search([('barcode','=',code)])
                             _logger.info("===============>product_tmpl_id %r" % int(producto))
                             _logger.info("===============>product_id %r" % int(producto))
                             _logger.info("===============>name %r" % int(self.publisher.partner_id))
                             _logger.info("===============>price %r" % precioSIVA)
                             supplier = self.env['product.supplierinfo']
                             seller = {
-                                'product_tmpl_id': int(producto),
+                                'product_tmpl_id': int(product_template),
                                 'product_id': int(producto),
                                 'name': int(prov),
                                 'product_uom': 1,
