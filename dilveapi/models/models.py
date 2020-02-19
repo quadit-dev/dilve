@@ -308,24 +308,28 @@ class record_status(models.Model):
                             })
                         producto = product.create(product_dic)
 
-                        _logger.info("===============>product_tmpl_id %r" % int(producto))
-                        _logger.info("===============>product_id %r" % int(producto))
-                        _logger.info("===============>name %r" % int(self.publisher.partner_id))
-                        _logger.info("===============>price %r" % precioSIVA)
-                        supplier = self.env['product.supplierinfo']
-                        seller = {
-                            'product_tmpl_id': int(producto),
-                            'product_id': int(producto),
-                            'name': int(self.publisher.partner_id),
-                            'product_uom': 1,
-                            'sequence': 1,
-                            'company_id': 1,
-                            'qty': float('0.0'),
-                            'delay': 1,
-                            'min_qty': 0,
-                            'price': precioSIVA
-                        }
-                        proveedor = supplier.create(seller)
+                        prov = self.publisher.partner_id
+                        if prov:
+                            _logger.info("===============>product_tmpl_id %r" % int(producto))
+                            _logger.info("===============>product_id %r" % int(producto))
+                            _logger.info("===============>name %r" % int(self.publisher.partner_id))
+                            _logger.info("===============>price %r" % precioSIVA)
+                            supplier = self.env['product.supplierinfo']
+                            seller = {
+                                'product_tmpl_id': int(producto),
+                                'product_id': int(producto),
+                                'name': int(prov),
+                                'product_uom': 1,
+                                'sequence': 1,
+                                'company_id': 1,
+                                'qty': float('0.0'),
+                                'delay': 1,
+                                'min_qty': 0,
+                                'price': precioSIVA
+                            }
+                            _logger.info("===============>seller %r" % seller)
+                            proveedor = supplier.create(seller)
+                            _logger.info("===============>proveedor %r" % proveedor)
 
         return {
             'type': 'ir.actions.act_window',
