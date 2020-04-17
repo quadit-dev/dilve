@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-<data>
+	<data>
 
-	<!--FORMULARIO REGISTRO UNICO-->
-	<record model="ir.ui.view" id="ws_datos">
-		<field name="name">ws.datos.form</field>
-		<field name="model">ws.datos</field>
-		<field name="type">form</field>
-		<field name="arch" type="xml">
-			<form string="Libros">
-				<group>
-					<h2>CUIDADO!!!!!! Esta a punto de actualizar uno o varios registros de los libros, asegurese que es lo que quiere hacer y en ese caso seleccione el botón "Actualizar".</h2>
-				</group>
-				<footer>
-					<button name="massiveData" string="Actualizar" type="object"/>
-					<button string="Cancelar" class="oe_link"
-                          special="cancel"/>
-				</footer>
-			</form>
-		</field>
-	</record>
+		<!--FORMULARIO REGISTRO UNICO-->
+		<record model="ir.ui.view" id="ws_datos">
+			<field name="name">ws.datos.form</field>
+			<field name="model">ws.datos</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Libros">
+					<group>
+						<h2>CUIDADO!!!!!! Esta a punto de actualizar uno o varios registros de los libros, asegurese que es lo que quiere hacer y en ese caso seleccione el botón "Actualizar".</h2>
+					</group>
+					<footer>
+						<button name="massiveData" string="Actualizar" type="object"/>
+						<button string="Cancelar" class="oe_link"
+	                          special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
 
-	<!--ACCION ASISTENTE-->
-	<act_window
-		name="Actualizar registro"
-		res_model="ws.datos"
-		src_model="management.modifications"
-		view_mode="form" target="new"
-		key2="client_action_multi"
-		id="action_ws_datos"
-		/>
+		<!--ACCION ASISTENTE-->
+		<act_window
+			name="Actualizar registro"
+			res_model="ws.datos"
+			src_model="management.modifications"
+			view_mode="form" target="new"
+			key2="client_action_multi"
+			id="action_ws_datos"
+			/>
 
-</data>
+	</data>
 </openerp>
