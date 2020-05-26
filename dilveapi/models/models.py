@@ -32,6 +32,7 @@ class codigos_editoriales(models.Model):
     nombre = fields.Char('Nombre', size=128)
     codigo = fields.Char('Código', size=12)
     partner_id = fields.Many2one('res.partner', 'Proveedor')
+    category = fields.Many2one('product.category', 'Categoría interna')
 
 class record_status(models.Model):
     _name = 'record.status'
@@ -551,6 +552,7 @@ class management_modifications(models.Model):
     _name = 'management.modifications'
     _description = 'Modelo de las modificaciones existentes en un intervalo de fechas.'
 
+    create_date = fields.Datetime('Fecha de creación', readonly=True)
     isbn = fields.Char('ISBN', size=13, readonly=True)
     title = fields.Char('Título', size=128, readonly=True)
     price_amount = fields.Float('Precio', readonly=True)

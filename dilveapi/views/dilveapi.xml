@@ -65,6 +65,7 @@
 			<form string="Libros">
 				<sheet>
 					<group colspan="4">
+						<field name="create_date"/>
 						<field name="publication_date"/>
 						<field name="isbn"/>
 						<field name="title"/>
@@ -96,11 +97,11 @@
         <field name="type">tree</field>
         <field name="arch" type="xml">
             <tree string="Libros">
+				<field name="create_date"/>
 				<field name="isbn"/>
 				<field name="title"/>
 				<field name="autor"/>
 				<field name="editorial"/>
-				<field name="publication_date"/>
 				<field name="url_image"/>
 				<field name="venta"/>
 				<field name="compra"/>
@@ -148,6 +149,7 @@
 						<field name="nombre"/>
 						<field name="codigo"/>
 						<field name="partner_id"/>
+						<field name="category"/>
 					</group>
 				</sheet>
 			</form>
@@ -163,6 +165,7 @@
             	<field name="nombre"/>
             	<field name="codigo"/>
             	<field name="partner_id"/>
+				<field name="category"/>
             </tree>
         </field>
     </record>

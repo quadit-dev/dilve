@@ -11,6 +11,9 @@ from StringIO import StringIO
 from datetime import datetime
 import base64
 import validators
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class management_modifications(models.Model):
 	_name = 'management.modifications'
@@ -117,6 +120,8 @@ class ws_datos(models.Model):
 				images = dato.getElementsByTagName("MediaFileLink")
 				i=0
 				opcion=0
+				img=False
+				cover_image=None
 				for image in images:
 					imagecode = dato.getElementsByTagName("MediaFileTypeCode")[i]
 					imagecode = str(imagecode.firstChild.data)
