@@ -199,7 +199,7 @@ class record_status(models.Model):
                                         _logger.info("===============>url_image %r" % url_image)
                                         if validators.url(url_image):
                                             img = True
-                                            file = self.env['management.modifications'].cover_image(url_image)
+                                            file = self.env['management.modifications'].cover_image(url_image,code)
                                             files = open('/tmp/imagen.jpg', 'r+')
                                             cover_image = files.read()
                                         else:
@@ -409,7 +409,7 @@ class record_status(models.Model):
                         url_image = str(url_image.firstChild.data)
                         if validators.url(url_image):
                             img=True
-                            file = self.env['management.modifications'].cover_image(url_image)
+                            file = self.env['management.modifications'].cover_image(url_image,code)
                             files = open('/tmp/imagen.jpg', 'r+')
                             cover_image = files.read()
                         else:
@@ -581,7 +581,7 @@ class management_modifications(models.Model):
             image = Image.open(file)
             image.save('/tmp/imagen.jpg')
         except Exception:
-            raise UserError("Revise el siguiente registro de forma manual para su actualización. % ", self.code)
+            raise UserError("Revise el siguiente registro de forma manual para su actualización. % ", code)
 
 class deleted_records(models.Model):
     _name = 'deleted.records'
