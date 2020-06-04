@@ -575,9 +575,10 @@ class management_modifications(models.Model):
 
     @api.multi
     def cover_image(self, url):
-        url = url
         data = urlopen(url).read()
+        _logger.info("===============>data %r" % data)
         file = StringIO(data)
+        _logger.info("===============>file %r" % file)
         image = Image.open(file)
         image.save('/tmp/imagen.jpg')
 
