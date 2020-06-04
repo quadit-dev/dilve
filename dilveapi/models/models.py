@@ -196,14 +196,18 @@ class record_status(models.Model):
                                     if imagecode=='04':
                                         url_image = dato.getElementsByTagName("MediaFileLink")[opcion]
                                         url_image = str(url_image.firstChild.data)
+                                        _logger.info("===============>url_image %r" % url_image)
                                         if validators.url(url_image):
                                             img = True
                                             file = self.env['management.modifications'].cover_image(url_image)
                                             files = open('/tmp/imagen.jpg', 'r+')
                                             cover_image = files.read()
                                         else:
-                                            img=False
-                                            cover_image = None
+                                            img=True
+                                            url_resource = "http://www.dilve.es/dilve/dilve/getResourceX.do?user="+ datos_id.user + "&password=" + datos_id.password + "&identifier=" + code + "&resource=" + url_image
+                                            file = self.env['management.modifications'].cover_image(url_resource)
+                                            files = open('/tmp/imagen.jpg', 'r+')
+                                            cover_image = files.read()
                                         break
                                     else:
                                         img=False
@@ -312,10 +316,6 @@ class record_status(models.Model):
                         prov = self.publisher.partner_id
                         if prov:
                             product_template = self.env['product.template'].search([('barcode','=',code)])
-                            _logger.info("===============>product_tmpl_id %r" % int(producto))
-                            _logger.info("===============>product_id %r" % int(producto))
-                            _logger.info("===============>name %r" % int(self.publisher.partner_id))
-                            _logger.info("===============>price %r" % precioSIVA)
                             supplier = self.env['product.supplierinfo']
                             seller = {
                                 'product_tmpl_id': int(product_template),
@@ -329,9 +329,7 @@ class record_status(models.Model):
                                 'min_qty': 0,
                                 'price': precioSIVA
                             }
-                            _logger.info("===============>seller %r" % seller)
                             proveedor = supplier.create(seller)
-                            _logger.info("===============>proveedor %r" % proveedor)
 
         return {
             'type': 'ir.actions.act_window',
@@ -415,8 +413,11 @@ class record_status(models.Model):
                             files = open('/tmp/imagen.jpg', 'r+')
                             cover_image = files.read()
                         else:
-                            img=False
-                            cover_image = None
+                            img=True
+                            url_resource = "http://www.dilve.es/dilve/dilve/getResourceX.do?user="+ datos_id.user + "&password=" + datos_id.password + "&identifier=" + code + "&resource=" + url_image
+                            file = self.env['management.modifications'].cover_image(url_resource)
+                            files = open('/tmp/imagen.jpg', 'r+')
+                            cover_image = files.read()
                         break
                     else:
                         img=False
@@ -428,9 +429,7 @@ class record_status(models.Model):
                     public_date = dato.getElementsByTagName("PublicationDate")[0]
                     public_date = public_date.firstChild.data
                     public_date = public_date #+ ' 06:00:00'
-                    _logger.info("===============>public_date %r" % public_date)
                     public_date = datetime.strptime(public_date, '%Y%m%d')
-                    _logger.info("===============>public_date 2 %r" % public_date)
                 else:
                     public_date = False
                 dispo = dato.getElementsByTagName("ProductAvailability")
