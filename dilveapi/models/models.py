@@ -575,12 +575,13 @@ class management_modifications(models.Model):
 
     @api.multi
     def cover_image(self, url):
-        data = urlopen(url).read()
-        _logger.info("===============>data %r" % data)
-        file = StringIO(data)
-        _logger.info("===============>file %r" % file)
-        image = Image.open(file)
-        image.save('/tmp/imagen.jpg')
+        try:
+            data = urlopen(url).read()
+            file = StringIO(data)
+            image = Image.open(file)
+            image.save('/tmp/imagen.jpg')
+        except Exception:
+            raise UserError("Revise el siguiente registro de forma manual para su actualización. % ", self.code)
 
 class deleted_records(models.Model):
     _name = 'deleted.records'
