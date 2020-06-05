@@ -581,7 +581,7 @@ class management_modifications(models.Model):
             image = Image.open(file)
             image.save('/tmp/imagen.jpg')
         except Exception:
-            raise UserError("Revise el siguiente registro de forma manual para su actualización. % ", code)
+            raise UserError("Revise el siguiente registro de forma manual para su actualización. %r " % code)
 
 class deleted_records(models.Model):
     _name = 'deleted.records'
