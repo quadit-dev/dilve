@@ -205,7 +205,7 @@ class record_status(models.Model):
                                         else:
                                             img=True
                                             url_resource = "http://www.dilve.es/dilve/dilve/getResourceX.do?user="+ datos_id.user + "&password=" + datos_id.password + "&identifier=" + code + "&resource=" + url_image
-                                            file = self.env['management.modifications'].cover_image(url_resource)
+                                            file = self.env['management.modifications'].cover_image(url_resource,code)
                                             files = open('/tmp/imagen.jpg', 'r+')
                                             cover_image = files.read()
                                         break
@@ -415,7 +415,7 @@ class record_status(models.Model):
                         else:
                             img=True
                             url_resource = "http://www.dilve.es/dilve/dilve/getResourceX.do?user="+ datos_id.user + "&password=" + datos_id.password + "&identifier=" + code + "&resource=" + url_image
-                            file = self.env['management.modifications'].cover_image(url_resource)
+                            file = self.env['management.modifications'].cover_image(url_resource,code)
                             files = open('/tmp/imagen.jpg', 'r+')
                             cover_image = files.read()
                         break
