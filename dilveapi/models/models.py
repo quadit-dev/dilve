@@ -142,123 +142,130 @@ class record_status(models.Model):
                             informacion = parseString(dataRecords.content)
                             datos = informacion.getElementsByTagName("Product")
                             for dato in datos:
-                                serie = dato.getElementsByTagName("Series")
-                                if serie:
-                                    titulo = dato.getElementsByTagName("TitleText")[1]
-                                else:
-                                    titulo = dato.getElementsByTagName("TitleText")[0]
-                                titulo = titulo.firstChild.data
-                                contributor = dato.getElementsByTagName("PersonNameInverted")
-                                #for contrib in contributor:
-                                if contributor:
-                                    autorD = dato.getElementsByTagName("PersonNameInverted")[0]
-                                    autorD = autorD.firstChild.data
-                                else:
-                                    autorD = ""
-                                price = dato.getElementsByTagName("PriceAmount")
-                                if price:
-                                    precio = dato.getElementsByTagName("PriceAmount")[0]
-                                    precio = precio.firstChild.data
-                                else:
-                                    precio = 0
-                                priceSIVA = dato.getElementsByTagName("TaxableAmount1")
-                                if priceSIVA:
-                                    precioSIVA = dato.getElementsByTagName("TaxableAmount1")[0]
-                                    precioSIVA = precioSIVA.firstChild.data
-                                else:
-                                    precioSIVA = 0
-                                edit = dato.getElementsByTagName("ImprintName")
-                                if edit:
-                                    editorialD = dato.getElementsByTagName("ImprintName")[0]
-                                    editorialD = editorialD.firstChild.data
-                                else:
-                                    editorialD = ""
-                                page = dato.getElementsByTagName("NumberOfPages")
-                                if page:
-                                    num_pag = dato.getElementsByTagName("NumberOfPages")[0]
-                                    num_pag = num_pag.firstChild.data
-                                else:
-                                    num_pag = 0
-                                descrip = dato.getElementsByTagName("Text")
-                                if descrip:
-                                    descripcion = dato.getElementsByTagName("Text")[0]
-                                    descripcion = descripcion.firstChild.data
-                                else:
-                                    descripcion = ""
-                                images = dato.getElementsByTagName("MediaFileLink")
-                                i=0
-                                opcion=0
-                                img=False
-                                cover_image=None
-                                for image in images:
-                                    imagecode = dato.getElementsByTagName("MediaFileTypeCode")[i]
-                                    imagecode = str(imagecode.firstChild.data)
-                                    if imagecode=='04':
-                                        url_image = dato.getElementsByTagName("MediaFileLink")[opcion]
-                                        url_image = str(url_image.firstChild.data)
-                                        _logger.info("===============>url_image %r" % url_image)
-                                        if validators.url(url_image):
-                                            img = True
-                                            file = self.env['management.modifications'].cover_image(url_image,code)
-                                            files = open('/tmp/imagen.jpg', 'r+')
-                                            cover_image = files.read()
-                                        else:
-                                            img=True
-                                            url_resource = "http://www.dilve.es/dilve/dilve/getResourceX.do?user="+ datos_id.user + "&password=" + datos_id.password + "&identifier=" + code + "&resource=" + url_image
-                                            file = self.env['management.modifications'].cover_image(url_resource,code)
-                                            files = open('/tmp/imagen.jpg', 'r+')
-                                            cover_image = files.read()
-                                        break
+                                _logger.info("===============>dato %r" % dato)
+                                producto = dato.getElementsByTagName("ProductForm")[0]
+                                _logger.info("===============>producto %r" % producto)
+                                producto = producto.firstChild.data
+                                _logger.info("===============>producto %r" % producto[0])
+                                if producto[0] == "B":
+                                    serie = dato.getElementsByTagName("Series")
+                                    if serie:
+                                        titulo = dato.getElementsByTagName("TitleText")[1]
                                     else:
-                                        img=False
-                                        cover_image = None
-                                        opcion=1
-                                    i=i+1
-                                dispo = dato.getElementsByTagName("ProductAvailability")
-                                if dispo:
-                                    disp = dato.getElementsByTagName("ProductAvailability")[0]
-                                    disp = disp.firstChild.data
-                                    estado = self.env['codigos.disponibilidad'].search([('codigo','=',disp)])
-                                    disponibilidad = estado.vender
-                                else:
-                                    disponibilidad = False
-                                pdate = dato.getElementsByTagName("PublicationDate")
-                                if pdate:
-                                    public_date = dato.getElementsByTagName("PublicationDate")[0]
-                                    public_date = public_date.firstChild.data
-                                    public_date = public_date + ' 06:00:00'
-                                else:
-                                    public_date = False
-                                measures = dato.getElementsByTagName("MeasureTypeCode")
-                                m=0
-                                alto = ancho = grueso = peso = ""
-                                for measure in measures:
-                                    measurecode = dato.getElementsByTagName("MeasureTypeCode")[m]
-                                    if str(measurecode.firstChild.data)=='01':
-                                        alto = dato.getElementsByTagName("Measurement")[m]
-                                        alto = float(alto.firstChild.data)/10
-                                    if str(measurecode.firstChild.data)=='02':
-                                        ancho = dato.getElementsByTagName("Measurement")[m]
-                                        ancho = float(ancho.firstChild.data)/10
-                                    if str(measurecode.firstChild.data)=='03':
-                                        grueso = dato.getElementsByTagName("Measurement")[m]
-                                        grueso = float(grueso.firstChild.data)/10
-                                    if str(measurecode.firstChild.data)=='08':
-                                        peso = dato.getElementsByTagName("Measurement")[m]
-                                        peso = float(peso.firstChild.data)
-                                    m=m+1
-                                edicion = dato.getElementsByTagName("EditionNumber")
-                                if edicion:
-                                    num_edicion = dato.getElementsByTagName("EditionNumber")[0]
-                                    num_edicion = num_edicion.firstChild.data
-                                else:
-                                    num_edicion = ""
-                                lugar = dato.getElementsByTagName("CountryOfPublication")
-                                if lugar:
-                                    lugar_edicion = dato.getElementsByTagName("CountryOfPublication")[0]
-                                    lugar_edicion = lugar_edicion.firstChild.data
-                                else:
-                                    lugar_edicion = ""
+                                        titulo = dato.getElementsByTagName("TitleText")[0]
+                                    titulo = titulo.firstChild.data
+                                    contributor = dato.getElementsByTagName("PersonNameInverted")
+                                    #for contrib in contributor:
+                                    if contributor:
+                                        autorD = dato.getElementsByTagName("PersonNameInverted")[0]
+                                        autorD = autorD.firstChild.data
+                                    else:
+                                        autorD = ""
+                                    price = dato.getElementsByTagName("PriceAmount")
+                                    if price:
+                                        precio = dato.getElementsByTagName("PriceAmount")[0]
+                                        precio = precio.firstChild.data
+                                    else:
+                                        precio = 0
+                                    priceSIVA = dato.getElementsByTagName("TaxableAmount1")
+                                    if priceSIVA:
+                                        precioSIVA = dato.getElementsByTagName("TaxableAmount1")[0]
+                                        precioSIVA = precioSIVA.firstChild.data
+                                    else:
+                                        precioSIVA = 0
+                                    edit = dato.getElementsByTagName("ImprintName")
+                                    if edit:
+                                        editorialD = dato.getElementsByTagName("ImprintName")[0]
+                                        editorialD = editorialD.firstChild.data
+                                    else:
+                                        editorialD = ""
+                                    page = dato.getElementsByTagName("NumberOfPages")
+                                    if page:
+                                        num_pag = dato.getElementsByTagName("NumberOfPages")[0]
+                                        num_pag = num_pag.firstChild.data
+                                    else:
+                                        num_pag = 0
+                                    descrip = dato.getElementsByTagName("Text")
+                                    if descrip:
+                                        descripcion = dato.getElementsByTagName("Text")[0]
+                                        descripcion = descripcion.firstChild.data
+                                    else:
+                                        descripcion = ""
+                                    images = dato.getElementsByTagName("MediaFileLink")
+                                    i=0
+                                    opcion=0
+                                    img=False
+                                    cover_image=None
+                                    for image in images:
+                                        imagecode = dato.getElementsByTagName("MediaFileTypeCode")[i]
+                                        imagecode = str(imagecode.firstChild.data)
+                                        if imagecode=='04':
+                                            url_image = dato.getElementsByTagName("MediaFileLink")[opcion]
+                                            url_image = str(url_image.firstChild.data)
+                                            _logger.info("===============>url_image %r" % url_image)
+                                            if validators.url(url_image):
+                                                img = True
+                                                file = self.env['management.modifications'].cover_image(url_image,code)
+                                                files = open('/tmp/imagen.jpg', 'r+')
+                                                cover_image = files.read()
+                                            else:
+                                                img=True
+                                                url_resource = "http://www.dilve.es/dilve/dilve/getResourceX.do?user="+ datos_id.user + "&password=" + datos_id.password + "&identifier=" + code + "&resource=" + url_image
+                                                file = self.env['management.modifications'].cover_image(url_resource,code)
+                                                files = open('/tmp/imagen.jpg', 'r+')
+                                                cover_image = files.read()
+                                            break
+                                        else:
+                                            img=False
+                                            cover_image = None
+                                            opcion=1
+                                        i=i+1
+                                    dispo = dato.getElementsByTagName("ProductAvailability")
+                                    if dispo:
+                                        disp = dato.getElementsByTagName("ProductAvailability")[0]
+                                        disp = disp.firstChild.data
+                                        estado = self.env['codigos.disponibilidad'].search([('codigo','=',disp)])
+                                        disponibilidad = estado.vender
+                                    else:
+                                        disponibilidad = False
+                                    pdate = dato.getElementsByTagName("PublicationDate")
+                                    if pdate:
+                                        public_date = dato.getElementsByTagName("PublicationDate")[0]
+                                        public_date = public_date.firstChild.data
+                                        public_date = public_date + ' 06:00:00'
+                                    else:
+                                        public_date = False
+                                    measures = dato.getElementsByTagName("MeasureTypeCode")
+                                    m=0
+                                    alto = ancho = grueso = peso = ""
+                                    for measure in measures:
+                                        measurecode = dato.getElementsByTagName("MeasureTypeCode")[m]
+                                        if str(measurecode.firstChild.data)=='01':
+                                            alto = dato.getElementsByTagName("Measurement")[m]
+                                            alto = float(alto.firstChild.data)/10
+                                        if str(measurecode.firstChild.data)=='02':
+                                            ancho = dato.getElementsByTagName("Measurement")[m]
+                                            ancho = float(ancho.firstChild.data)/10
+                                        if str(measurecode.firstChild.data)=='03':
+                                            grueso = dato.getElementsByTagName("Measurement")[m]
+                                            grueso = float(grueso.firstChild.data)/10
+                                        if str(measurecode.firstChild.data)=='08':
+                                            peso = dato.getElementsByTagName("Measurement")[m]
+                                            peso = float(peso.firstChild.data)
+                                            peso = peso / 1000
+                                        m=m+1
+                                    edicion = dato.getElementsByTagName("EditionNumber")
+                                    if edicion:
+                                        num_edicion = dato.getElementsByTagName("EditionNumber")[0]
+                                        num_edicion = num_edicion.firstChild.data
+                                    else:
+                                        num_edicion = ""
+                                    lugar = dato.getElementsByTagName("CountryOfPublication")
+                                    if lugar:
+                                        lugar_edicion = dato.getElementsByTagName("CountryOfPublication")[0]
+                                        lugar_edicion = lugar_edicion.firstChild.data
+                                    else:
+                                        lugar_edicion = ""
                         record = self.env['management.modifications'].search([('isbn','=',code)])
                         if not record:
                             registro = record.create({
@@ -292,6 +299,7 @@ class record_status(models.Model):
                             'sale_ok':disponibilidad,
                             'purchase_ok':disponibilidad,
                             'website_published':disponibilidad,
+                            'weight':peso,
                             ###Estructura para los datos en el menu variants
                             'fecha_publicacion_ok':public_date,
                             'titulo_lang':titulo,
@@ -457,6 +465,7 @@ class record_status(models.Model):
                     if str(measurecode.firstChild.data)=='08':
                         peso = dato.getElementsByTagName("Measurement")[m]
                         peso = float(peso.firstChild.data)
+                        peso = peso / 1000
                     m=m+1
                 edicion = dato.getElementsByTagName("EditionNumber")
                 if edicion:
@@ -526,6 +535,7 @@ class record_status(models.Model):
                 'sale_ok':disponibilidad,
                 'purchase_ok':disponibilidad,
                 'website_published':disponibilidad,
+                'weight':peso,
                 ###Estructura para los datos en el menu variants
                 'fecha_publicacion_ok':public_date,
                 'titulo_lang':titulo,
