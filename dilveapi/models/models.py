@@ -574,7 +574,7 @@ class management_modifications(models.Model):
     web = fields.Boolean('Publicar sitio web')
 
     @api.multi
-    def cover_image(self, url):
+    def cover_image(self, url, code):
         try:
             data = urlopen(url).read()
             file = StringIO(data)
