@@ -204,13 +204,15 @@ class record_status(models.Model):
                                             if validators.url(url_image):
                                                 _logger.info("===============>1")
                                                 img = self.cover_image(url_image,code)
+                                                _logger.info("===============>img %r" % img)
                                                 if img==True:
                                                     files = open('/tmp/imagen.jpg', 'r+')
                                                     cover_image = files.read()
                                             else:
                                                 _logger.info("===============>2")
                                                 url_resource = "http://www.dilve.es/dilve/dilve/getResourceX.do?user="+ datos_id.user + "&password=" + datos_id.password + "&identifier=" + code + "&resource=" + url_image
-                                                img = self.cover_image(url_image,code)
+                                                img = self.cover_image(url_resource,code)
+                                                _logger.info("===============>img %r" % img)
                                                 if img==True:
                                                     files = open('/tmp/imagen.jpg', 'r+')
                                                     cover_image = files.read()
@@ -418,13 +420,15 @@ class record_status(models.Model):
                         if validators.url(url_image):
                             _logger.info("===============>1")
                             img = self.cover_image(url_image,code)
+                            _logger.info("===============>img %r" % img)
                             if img==True:
                                 files = open('/tmp/imagen.jpg', 'r+')
                                 cover_image = files.read()
                         else:
                             _logger.info("===============>2")
                             url_resource = "http://www.dilve.es/dilve/dilve/getResourceX.do?user="+ datos_id.user + "&password=" + datos_id.password + "&identifier=" + code + "&resource=" + url_image
-                            img = self.cover_image(url_image,code)
+                            img = self.cover_image(url_resource,code)
+                            _logger.info("===============>img %r" % img)
                             if img==True:
                                 files = open('/tmp/imagen.jpg', 'r+')
                                 cover_image = files.read()
@@ -563,11 +567,11 @@ class record_status(models.Model):
     def cover_image(self, url, code):
         try:
             data = urlopen(url).read()
-            # _logger.info("===============>data %r" % data)
+            _logger.info("===============>data %r" % data)
             file = StringIO(data)
-            # _logger.info("===============>file %r" % file)
+            _logger.info("===============>file %r" % file)
             image = Image.open(file)
-            # _logger.info("===============>image %r" % image)
+            _logger.info("===============>image %r" % image)
             image.save('/tmp/imagen.jpg')
             return True
         except Exception:
