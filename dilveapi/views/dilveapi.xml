@@ -9,6 +9,9 @@
 		<field name="type">form</field>
 		<field name="arch" type="xml">
 			<form string="Consulta">
+				<header>
+                    <button name="getData" string="Generar Solicitud" type="object"/>
+                </header>
 				<sheet>
 					<group colspan="4">
 						<field name="create_date"/>
@@ -22,11 +25,10 @@
 						<field name="country" placeholder="Código del país"/>
 					</group>
 				</sheet>
-				<footer>
-					<center>
-                    	<button name="getData" string="Generar Solicitud" type="object"/>
-                    </center>
-                </footer>
+				<div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
 			</form>
 		</field>
 	</record>

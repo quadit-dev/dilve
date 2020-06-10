@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from openerp import models, fields, api, tools
+from openerp import models, fields, api, tools, _
 from openerp.exceptions import UserError, ValidationError, Warning
 import requests
 from xml.dom.minidom import parse, parseString
@@ -36,6 +36,7 @@ class codigos_editoriales(models.Model):
 
 class record_status(models.Model):
     _name = 'record.status'
+    _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     create_date = fields.Datetime('Fecha de solicitud', readonly=True)
     fromDate = fields.Datetime('Fecha de Inicio', required=True)
@@ -142,11 +143,8 @@ class record_status(models.Model):
                             informacion = parseString(dataRecords.content)
                             datos = informacion.getElementsByTagName("Product")
                             for dato in datos:
-                                _logger.info("===============>dato %r" % dato)
                                 producto = dato.getElementsByTagName("ProductForm")[0]
-                                _logger.info("===============>producto %r" % producto)
                                 producto = producto.firstChild.data
-                                _logger.info("===============>producto %r" % producto[0])
                                 if producto[0] == "B":
                                     serie = dato.getElementsByTagName("Series")
                                     if serie:
@@ -202,18 +200,20 @@ class record_status(models.Model):
                                         if imagecode=='04':
                                             url_image = dato.getElementsByTagName("MediaFileLink")[opcion]
                                             url_image = str(url_image.firstChild.data)
-                                            _logger.info("===============>url_image %r" % url_image)
+                                            # _logger.info("===============>url_image %r" % url_image)
                                             if validators.url(url_image):
-                                                img = True
-                                                file = self.env['management.modifications'].cover_image(url_image,code)
-                                                files = open('/tmp/imagen.jpg', 'r+')
-                                                cover_image = files.read()
+                                                _logger.info("===============>1")
+                                                img = self.cover_image(url_image,code)
+                                                if img==True:
+                                                    files = open('/tmp/imagen.jpg', 'r+')
+                                                    cover_image = files.read()
                                             else:
-                                                img=True
+                                                _logger.info("===============>2")
                                                 url_resource = "http://www.dilve.es/dilve/dilve/getResourceX.do?user="+ datos_id.user + "&password=" + datos_id.password + "&identifier=" + code + "&resource=" + url_image
-                                                file = self.env['management.modifications'].cover_image(url_resource,code)
-                                                files = open('/tmp/imagen.jpg', 'r+')
-                                                cover_image = files.read()
+                                                img = self.cover_image(url_image,code)
+                                                if img==True:
+                                                    files = open('/tmp/imagen.jpg', 'r+')
+                                                    cover_image = files.read()
                                             break
                                         else:
                                             img=False
@@ -266,78 +266,78 @@ class record_status(models.Model):
                                         lugar_edicion = lugar_edicion.firstChild.data
                                     else:
                                         lugar_edicion = ""
-                        record = self.env['management.modifications'].search([('isbn','=',code)])
-                        if not record:
-                            registro = record.create({
-                                'isbn':code,
-                                'title':titulo,
-                                'price_amount':precio,
-                                'price_before_tax':precioSIVA,
-                                'autor':autorD,
-                                'editorial':editorialD,
-                                'page_num':num_pag,
-                                'other_text':descripcion,
-                                'url_image':img,
-                                'venta':disponibilidad,
-                                'compra':disponibilidad,
-                                'web':disponibilidad,
-                                'publication_date':public_date,
-                                'height':alto,
-                                'width':ancho,
-                                'thick':grueso,
-                                'weight':peso,
-                                'edicion':num_edicion,
-                                'lugar_edicion':lugar_edicion
-                                })
-                        product = self.env['product.product']
-                        product_dic = {
-                            'barcode':code,
-                            'name':titulo,
-                            'type':'product',
-                            'list_price':precioSIVA,
-                            'standard_price':precioSIVA,
-                            'sale_ok':disponibilidad,
-                            'purchase_ok':disponibilidad,
-                            'website_published':disponibilidad,
-                            'weight':peso,
-                            ###Estructura para los datos en el menu variants
-                            'fecha_publicacion_ok':public_date,
-                            'titulo_lang':titulo,
-                            'autor':autorD,
-                            'isbn_13':code,
-                            'editorial':editorialD,
-                            'numero_paginas':num_pag,
-                            'alto':alto,
-                            'ancho':ancho,
-                            'grueso':grueso,
-                            'peso':peso,
-                            'edicion':num_edicion,
-                            'texto_resumen':descripcion,
-                            'lugar_edicion':lugar_edicion
-                            }
-                        if cover_image:
-                            product_dic.update({
-                                'image_medium':base64.encodestring(cover_image)
-                            })
-                        producto = product.create(product_dic)
+                                    record = self.env['management.modifications'].search([('isbn','=',code)])
+                                    if not record:
+                                        registro = record.create({
+                                            'isbn':code,
+                                            'title':titulo,
+                                            'price_amount':precio,
+                                            'price_before_tax':precioSIVA,
+                                            'autor':autorD,
+                                            'editorial':editorialD,
+                                            'page_num':num_pag,
+                                            'other_text':descripcion,
+                                            'url_image':img,
+                                            'venta':disponibilidad,
+                                            'compra':disponibilidad,
+                                            'web':disponibilidad,
+                                            'publication_date':public_date,
+                                            'height':alto,
+                                            'width':ancho,
+                                            'thick':grueso,
+                                            'weight':peso,
+                                            'edicion':num_edicion,
+                                            'lugar_edicion':lugar_edicion
+                                            })
+                                    product = self.env['product.product']
+                                    product_dic = {
+                                        'barcode':code,
+                                        'name':titulo,
+                                        'type':'product',
+                                        'list_price':precioSIVA,
+                                        'standard_price':precioSIVA,
+                                        'sale_ok':disponibilidad,
+                                        'purchase_ok':disponibilidad,
+                                        'website_published':disponibilidad,
+                                        'weight':peso,
+                                        ###Estructura para los datos en el menu variants
+                                        'fecha_publicacion_ok':public_date,
+                                        'titulo_lang':titulo,
+                                        'autor':autorD,
+                                        'isbn_13':code,
+                                        'editorial':editorialD,
+                                        'numero_paginas':num_pag,
+                                        'alto':alto,
+                                        'ancho':ancho,
+                                        'grueso':grueso,
+                                        'peso':peso,
+                                        'edicion':num_edicion,
+                                        'texto_resumen':descripcion,
+                                        'lugar_edicion':lugar_edicion
+                                        }
+                                    if cover_image:
+                                        product_dic.update({
+                                            'image_medium':base64.encodestring(cover_image)
+                                        })
+                                    producto = product.create(product_dic)
 
-                        prov = self.publisher.partner_id
-                        if prov:
-                            product_template = self.env['product.template'].search([('barcode','=',code)])
-                            supplier = self.env['product.supplierinfo']
-                            seller = {
-                                'product_tmpl_id': int(product_template),
-                                'product_id': int(producto),
-                                'name': int(prov),
-                                'product_uom': 1,
-                                'sequence': 1,
-                                'company_id': 1,
-                                'qty': float('0.0'),
-                                'delay': 1,
-                                'min_qty': 0,
-                                'price': precioSIVA
-                            }
-                            proveedor = supplier.create(seller)
+                                    prov = self.publisher.partner_id
+                                    if prov:
+                                        product_template = self.env['product.template'].search([('barcode','=',code)])
+                                        supplier = self.env['product.supplierinfo']
+                                        seller = {
+                                            'product_tmpl_id': int(product_template),
+                                            'product_id': int(producto),
+                                            'name': int(prov),
+                                            'product_uom': 1,
+                                            'sequence': 1,
+                                            'company_id': 1,
+                                            'qty': float('0.0'),
+                                            'delay': 1,
+                                            'min_qty': 0,
+                                            'price': precioSIVA
+                                        }
+                                        proveedor = supplier.create(seller)
 
         return {
             'type': 'ir.actions.act_window',
@@ -416,16 +416,18 @@ class record_status(models.Model):
                         url_image = dato.getElementsByTagName("MediaFileLink")[opcion]
                         url_image = str(url_image.firstChild.data)
                         if validators.url(url_image):
-                            img=True
-                            file = self.env['management.modifications'].cover_image(url_image,code)
-                            files = open('/tmp/imagen.jpg', 'r+')
-                            cover_image = files.read()
+                            _logger.info("===============>1")
+                            img = self.cover_image(url_image,code)
+                            if img==True:
+                                files = open('/tmp/imagen.jpg', 'r+')
+                                cover_image = files.read()
                         else:
-                            img=True
+                            _logger.info("===============>2")
                             url_resource = "http://www.dilve.es/dilve/dilve/getResourceX.do?user="+ datos_id.user + "&password=" + datos_id.password + "&identifier=" + code + "&resource=" + url_image
-                            file = self.env['management.modifications'].cover_image(url_resource,code)
-                            files = open('/tmp/imagen.jpg', 'r+')
-                            cover_image = files.read()
+                            img = self.cover_image(url_image,code)
+                            if img==True:
+                                files = open('/tmp/imagen.jpg', 'r+')
+                                cover_image = files.read()
                         break
                     else:
                         img=False
@@ -557,6 +559,23 @@ class record_status(models.Model):
                 })
             producto = product.update(product_dic)
 
+    @api.multi
+    def cover_image(self, url, code):
+        try:
+            data = urlopen(url).read()
+            # _logger.info("===============>data %r" % data)
+            file = StringIO(data)
+            # _logger.info("===============>file %r" % file)
+            image = Image.open(file)
+            # _logger.info("===============>image %r" % image)
+            image.save('/tmp/imagen.jpg')
+            return True
+        except Exception:
+            _logger.info("===============>Exception")
+            post_vars = {'subject': 'Mensaje', 'body': _('El siguiente código presento error, reviselo manualmente. %r' % str(code)), }  # noqa
+            self.message_post(type="notification", subtype="mt_comment", **post_vars)
+            return False
+
 class management_modifications(models.Model):
     _name = 'management.modifications'
     _description = 'Modelo de las modificaciones existentes en un intervalo de fechas.'
@@ -582,16 +601,6 @@ class management_modifications(models.Model):
     venta = fields.Boolean('Puede ser vendido')
     compra = fields.Boolean('Puede ser comprado')
     web = fields.Boolean('Publicar sitio web')
-
-    @api.multi
-    def cover_image(self, url, code):
-        try:
-            data = urlopen(url).read()
-            file = StringIO(data)
-            image = Image.open(file)
-            image.save('/tmp/imagen.jpg')
-        except Exception:
-            raise UserError("Revise el siguiente registro de forma manual para su actualización. %r " % code)
 
 class deleted_records(models.Model):
     _name = 'deleted.records'
