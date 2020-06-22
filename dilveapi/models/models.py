@@ -45,10 +45,8 @@ class record_status(models.Model):
                                     ('N','Nuevos'),
                                     ('C','Cambios'),
                                     ('D','Borrados')], 'Tipo', default="N")
-    detail = fields.Selection([('N','Normal'),
-                                    ('D','Fecha')], 'Detalle', default="N")
-    hyphens = fields.Selection([('N','No'),
-                                    ('Y','Si')], 'Guiones', default="N")
+    detail = fields.Selection([('N','Normal')], 'Detalle', default="N")
+    hyphens = fields.Selection([('N','No')], 'Guiones', default="N")
     publisher = fields.Many2one(
         'codigos.editoriales', 
         'Editorial')
@@ -318,6 +316,22 @@ class record_status(models.Model):
                                             'image_medium':base64.encodestring(cover_image)
                                         })
                                     producto = product.create(product_dic)
+
+                                    product_template = self.env['product.template'].search([('barcode','=',code)])
+                                    rules = self.env['stock.warehouse.orderpoint']
+                                    rule = {
+                                        'name':'OP/00110',
+                                        'product_id':int(producto),
+                                        'product_min_qty':'0',
+                                        'product_max_qty':'0',
+                                        'qty_multiple':'1',
+                                        'warehouse_id':'1',
+                                        'location_id':'12',
+                                        'active':True,
+                                        'lead_days':'1',
+                                        'lead_type':'net'
+                                        }
+                                    orderpoint = rules.create(rule)
 
                                     prov = self.publisher.partner_id
                                     if prov:
