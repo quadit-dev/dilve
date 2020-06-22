@@ -233,7 +233,7 @@ class record_status(models.Model):
                                         public_date = False
                                     measures = dato.getElementsByTagName("MeasureTypeCode")
                                     m=0
-                                    alto = ancho = grueso = peso = ""
+                                    alto = ancho = grueso = peso = "0.0"
                                     for measure in measures:
                                         measurecode = dato.getElementsByTagName("MeasureTypeCode")[m]
                                         if str(measurecode.firstChild.data)=='01':
@@ -461,7 +461,7 @@ class record_status(models.Model):
                     disponibilidad = False
                 measures = dato.getElementsByTagName("MeasureTypeCode")
                 m=0
-                alto = ancho = grueso = peso = ""
+                alto = ancho = grueso = peso = "0.0"
                 for measure in measures:
                     measurecode = dato.getElementsByTagName("MeasureTypeCode")[m]
                     if str(measurecode.firstChild.data)=='01':
@@ -567,23 +567,6 @@ class record_status(models.Model):
                     'image_medium':base64.encodestring(cover_image)
                 })
             producto = product.update(product_dic)
-
-            exist_rule = self.env['stock.warehouse.orderpoint'].search([('product_id', '=', producto)])
-            if not exist_rule:
-                rules = self.env['stock.warehouse.orderpoint']
-                rule = {
-                    'name':'OP/00110',
-                    'product_id':int(producto),
-                    'product_min_qty':'0',
-                    'product_max_qty':'0',
-                    'qty_multiple':'1',
-                    'warehouse_id':'1',
-                    'location_id':'12',
-                    'active':True,
-                    'lead_days':'1',
-                    'lead_type':'supplier'
-                }
-                orderpoint = rules.create(rule)
 
     @api.multi
     def cover_image(self, url, code):
