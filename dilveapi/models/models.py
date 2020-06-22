@@ -317,7 +317,6 @@ class record_status(models.Model):
                                         })
                                     producto = product.create(product_dic)
 
-                                    product_template = self.env['product.template'].search([('barcode','=',code)])
                                     rules = self.env['stock.warehouse.orderpoint']
                                     rule = {
                                         'name':'OP/00110',
@@ -329,7 +328,7 @@ class record_status(models.Model):
                                         'location_id':'12',
                                         'active':True,
                                         'lead_days':'1',
-                                        'lead_type':'net'
+                                        'lead_type':'supplier'
                                         }
                                     orderpoint = rules.create(rule)
 
@@ -568,6 +567,23 @@ class record_status(models.Model):
                     'image_medium':base64.encodestring(cover_image)
                 })
             producto = product.update(product_dic)
+
+            exist_rule = self.env['stock.warehouse.orderpoint'].search([('product_id', '=', producto)])
+            if not exist_rule:
+                rules = self.env['stock.warehouse.orderpoint']
+                rule = {
+                    'name':'OP/00110',
+                    'product_id':int(producto),
+                    'product_min_qty':'0',
+                    'product_max_qty':'0',
+                    'qty_multiple':'1',
+                    'warehouse_id':'1',
+                    'location_id':'12',
+                    'active':True,
+                    'lead_days':'1',
+                    'lead_type':'supplier'
+                }
+                orderpoint = rules.create(rule)
 
     @api.multi
     def cover_image(self, url, code):
