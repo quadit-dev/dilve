@@ -125,6 +125,14 @@ class record_status(models.Model):
                             'isbn':code,
                             'title':products.name
                             })
+                        product = self.env['product.template'].search([('barcode','=',code)])
+                        product_dic = {
+                            'barcode':code,
+                            'sale_ok':disponibilidad,
+                            'purchase_ok':disponibilidad,
+                            'website_published':disponibilidad
+                        }
+                        producto = product.update(product_dic)
                 else:
                     record = self.env['product.template'].search([('barcode','=',code)])
                     if record:
@@ -361,6 +369,8 @@ class record_status(models.Model):
 
     @api.multi
     def update_record(self,code):
+        titulo = precioSIVA = precioSIVA = precio = public_date = disponibilidad = descripcion = cover_image = False
+        autorD = editorialD = num_pag = alto = ancho = grueso = num_edicion = lugar_edicion = img = False
         code = code
         datos = self.env['config.usuario']
         datos_id = datos.search([])
@@ -490,83 +500,93 @@ class record_status(models.Model):
                     lugar_edicion = lugar_edicion.firstChild.data
                 else:
                     lugar_edicion = ""
-            record = self.env['management.modifications'].search([('isbn','=',code)])
-            if record:
-                registro = record.update({
-                    'isbn':code,
-                    'title':titulo,
-                    'price_amount':precio,
-                    'price_before_tax':precioSIVA,
-                    'autor':autorD,
-                    'editorial':editorialD,
-                    'page_num':num_pag,
-                    'other_text':descripcion,
-                    'url_image':img,
-                    'venta':disponibilidad,
-                    'compra':disponibilidad,
-                    'web':disponibilidad,
-                    #'publication_date':public_date,
-                    'height':alto,
-                    'width':ancho,
-                    'thick':grueso,
-                    'weight':peso,
-                    'edicion':num_edicion,
-                    'lugar_edicion':lugar_edicion
-                    })
-            else:
-                registro = record.create({
-                    'isbn':code,
-                    'title':titulo,
-                    'price_amount':precio,
-                    'price_before_tax':precioSIVA,
-                    'autor':autorD,
-                    'editorial':editorialD,
-                    'page_num':num_pag,
-                    'other_text':descripcion,
-                    'url_image':img,
-                    'venta':disponibilidad,
-                    'compra':disponibilidad,
-                    'web':disponibilidad,
-                    'publication_date':public_date,
-                    'height':alto,
-                    'width':ancho,
-                    'thick':grueso,
-                    'weight':peso,
-                    'edicion':num_edicion,
-                    'lugar_edicion':lugar_edicion
-                    })
+            if titulo:
+                record = self.env['management.modifications'].search([('isbn','=',code)])
+                if record:
+                    registro = record.update({
+                        'isbn':code,
+                        'title':titulo,
+                        'price_amount':precio,
+                        'price_before_tax':precioSIVA,
+                        'autor':autorD,
+                        'editorial':editorialD,
+                        'page_num':num_pag,
+                        'other_text':descripcion,
+                        'url_image':img,
+                        'venta':disponibilidad,
+                        'compra':disponibilidad,
+                        'web':disponibilidad,
+                        #'publication_date':public_date,
+                        'height':alto,
+                        'width':ancho,
+                        'thick':grueso,
+                        'weight':peso,
+                        'edicion':num_edicion,
+                        'lugar_edicion':lugar_edicion
+                        })
+                else:
+                    registro = record.create({
+                        'isbn':code,
+                        'title':titulo,
+                        'price_amount':precio,
+                        'price_before_tax':precioSIVA,
+                        'autor':autorD,
+                        'editorial':editorialD,
+                        'page_num':num_pag,
+                        'other_text':descripcion,
+                        'url_image':img,
+                        'venta':disponibilidad,
+                        'compra':disponibilidad,
+                        'web':disponibilidad,
+                        'publication_date':public_date,
+                        'height':alto,
+                        'width':ancho,
+                        'thick':grueso,
+                        'weight':peso,
+                        'edicion':num_edicion,
+                        'lugar_edicion':lugar_edicion
+                        })
 
-            product = self.env['product.product'].search([('barcode','=',code)])
-            product_dic = {
-                'barcode':code,
-                'name':titulo,
-                'type':'product',
-                'list_price':precioSIVA,
-                'standard_price':precioSIVA,
-                'sale_ok':disponibilidad,
-                'purchase_ok':disponibilidad,
-                'website_published':disponibilidad,
-                'weight':peso,
-                ###Estructura para los datos en el menu variants
-                'fecha_publicacion_ok':public_date,
-                'titulo_lang':titulo,
-                'autor':autorD,
-                'isbn_13':code,
-                'editorial':editorialD,
-                'numero_paginas':num_pag,
-                'alto':alto,
-                'ancho':ancho,
-                'grueso':grueso,
-                'peso':peso,
-                'edicion':num_edicion,
-                'texto_resumen':descripcion,
-                'lugar_edicion':lugar_edicion
+                product = self.env['product.product'].search([('barcode','=',code)])
+                product_dic = {
+                    'barcode':code,
+                    'name':titulo,
+                    'type':'product',
+                    'list_price':precioSIVA,
+                    'standard_price':precioSIVA,
+                    'sale_ok':disponibilidad,
+                    'purchase_ok':disponibilidad,
+                    'website_published':disponibilidad,
+                    'weight':peso,
+                    ###Estructura para los datos en el menu variants
+                    'fecha_publicacion_ok':public_date,
+                    'titulo_lang':titulo,
+                    'autor':autorD,
+                    'isbn_13':code,
+                    'editorial':editorialD,
+                    'numero_paginas':num_pag,
+                    'alto':alto,
+                    'ancho':ancho,
+                    'grueso':grueso,
+                    'peso':peso,
+                    'edicion':num_edicion,
+                    'texto_resumen':descripcion,
+                    'lugar_edicion':lugar_edicion
+                    }
+                if cover_image:
+                    product_dic.update({
+                        'image_medium':base64.encodestring(cover_image)
+                    })
+                producto = product.update(product_dic)
+            else:
+                product = self.env['product.template'].search([('barcode','=',code)])
+                product_dic = {
+                    'barcode':code,
+                    'sale_ok':disponibilidad,
+                    'purchase_ok':disponibilidad,
+                    'website_published':disponibilidad
                 }
-            if cover_image:
-                product_dic.update({
-                    'image_medium':base64.encodestring(cover_image)
-                })
-            producto = product.update(product_dic)
+                producto = product.update(product_dic)
 
     @api.multi
     def cover_image(self, url, code):
