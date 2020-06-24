@@ -154,7 +154,8 @@ class record_status(models.Model):
                                 if producto[0] == "B":
                                     serie = dato.getElementsByTagName("Series")
                                     if serie:
-                                        titulo = dato.getElementsByTagName("TitleText")[1]
+                                        titles = len(dato.getElementsByTagName("TitleText"))
+                                        titulo = dato.getElementsByTagName("TitleText")[titles-1]
                                     else:
                                         titulo = dato.getElementsByTagName("TitleText")[0]
                                     titulo = titulo.firstChild.data
@@ -385,7 +386,8 @@ class record_status(models.Model):
             for dato in datos:
                 serie = dato.getElementsByTagName("Series")
                 if serie:
-                    titulo = dato.getElementsByTagName("TitleText")[1]
+                    titles = len(dato.getElementsByTagName("TitleText"))
+                    titulo = dato.getElementsByTagName("TitleText")[titles-1]
                 else:
                     titulo = dato.getElementsByTagName("TitleText")[0]
                 titulo = ustr(titulo.firstChild.data)
