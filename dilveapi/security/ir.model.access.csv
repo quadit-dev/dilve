@@ -5,5 +5,6 @@ access_record_status,access.record.status,model_record_status,dilveapi.group_man
 access_management_modifications,access.management.modifications,model_management_modifications,dilveapi.group_manager_dilveapi,1,1,1,0
 access_deleted_records,access.deleted.records,model_deleted_records,dilveapi.group_manager_dilveapi,1,1,1,0
 access_config_usuario,access.config.usuario,model_config_usuario,dilveapi.group_manager_dilveapi,1,1,1,0
+access_request_status,access.request.status,model_request_status,dilveapi.group_manager_dilveapi,1,1,1,0
 access_ws_datos,access.ws.datos,model_ws_datos,dilveapi.group_manager_dilveapi,1,1,1,0
 access_ws_records,access.ws.records,model_ws_records,dilveapi.group_manager_dilveapi,1,1,1,0

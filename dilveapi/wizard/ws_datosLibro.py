@@ -59,4 +59,4 @@ class ws_datos(models.Model):
 		for active_id in active_ids:
 			code_br = self.env['management.modifications'].search([('id','=',active_id)])
 			if code_br:
-				res = self.env['record.status'].update_record(code_br.isbn)
+				res = self.env['record.status'].get_record(code_br.isbn)

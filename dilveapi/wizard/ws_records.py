@@ -52,4 +52,4 @@ class ws_records(models.Model):
 		for active_id in active_ids:
 			code_br = self.env['product.template'].search([('id','=',active_id)])
 			if code_br:
-				res = self.env['record.status'].update_record(code_br.barcode)
+				res = self.env['record.status'].get_record(code_br.barcode)

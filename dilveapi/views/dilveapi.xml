@@ -18,10 +18,7 @@
 						<field name="fromDate" placeholder="Indica el momento hasta el que se quiere el listado de cambios."/>
 						<field name="toDate" placeholder="Indica el momento hasta el que se quiere el listado de cambios."/>
 						<field name="requestType"/>
-						<field name="detail"/>
-						<field name="hyphens"/>
 						<field name="publisher" placeholder="Id de la editorial"/>
-						<field name="publishertype"/>
 						<field name="country" placeholder="Código del país"/>
 					</group>
 				</sheet>
@@ -43,10 +40,7 @@
             	<field name="fromDate"/>
             	<field name="toDate"/>
             	<field name="requestType"/>
-            	<field name="detail"/>
-            	<field name="hyphens"/>
             	<field name="publisher"/>
-            	<field name="publishertype"/>
             	<field name="country"/>
             </tree>
         </field>
