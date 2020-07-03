@@ -45,7 +45,7 @@ class request_status(models.Model):
         publisher_id = self.env['codigos.editoriales'].search([('partner_id', '!=', False)])
 
         for publisher in publisher_id:
-            _logger.info("===============>publisher %r" % publisher.nombre)
+            _logger.info("=========================================================>publisher %r" % publisher.nombre)
             news_records = self.env['record.status'].get_status(from_date,'N',publisher.codigo)
             if news_records.status_code == 200:
                 new_record = parseString(news_records.text)

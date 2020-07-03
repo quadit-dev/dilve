@@ -29,7 +29,7 @@ class deleted_records(models.Model):
         disponibilidad = False
         products = self.env['product.product'].search([('barcode','=',code)])
         if products:
-            _logger.info("===============>code %r" % code)
+            # _logger.info("===============>code %r" % code)
             registro = self.env['deleted.records'].create({
                 'isbn':code,
                 'title':products.name,

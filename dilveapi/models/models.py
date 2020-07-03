@@ -118,7 +118,7 @@ class record_status(models.Model):
 
     @api.multi
     def get_record(self,code):
-        titulo = precioSIVA = precioSIVA = precio = public_date = disponibilidad = descripcion = cover_image = False
+        titulo = precioSIVA = precioSIVA = precio = public_date = disp_venta = disp_compra = disp_web = descripcion = cover_image = False
         autorD = editorialD = num_pag = alto = ancho = grueso = num_edicion = lugar_edicion = img = False
         code = code
         datos = self.env['config.usuario']
@@ -219,9 +219,11 @@ class record_status(models.Model):
                         disp = dato.getElementsByTagName("ProductAvailability")[0]
                         disp = disp.firstChild.data
                         estado = self.env['codigos.disponibilidad'].search([('codigo','=',disp)])
-                        disponibilidad = estado.vender
+                        disp_venta = estado.vender
+                        disp_compra = estado.comprar
+                        disp_web = estado.web
                     else:
-                        disponibilidad = False
+                        disp_venta = disp_compra = disp_web = False
                     measures = dato.getElementsByTagName("MeasureTypeCode")
                     m=0
                     alto = ancho = grueso = peso = "0.0"
@@ -266,9 +268,9 @@ class record_status(models.Model):
                         'page_num':num_pag,
                         'other_text':descripcion,
                         'url_image':img,
-                        'venta':disponibilidad,
-                        'compra':disponibilidad,
-                        'web':disponibilidad,
+                        'venta':disp_venta,
+                        'compra':disp_compra,
+                        'web':disp_web,
                         'height':alto,
                         'width':ancho,
                         'thick':grueso,
@@ -287,9 +289,9 @@ class record_status(models.Model):
                         'page_num':num_pag,
                         'other_text':descripcion,
                         'url_image':img,
-                        'venta':disponibilidad,
-                        'compra':disponibilidad,
-                        'web':disponibilidad,
+                        'venta':disp_venta,
+                        'compra':disp_compra,
+                        'web':disp_web,
                         'publication_date':public_date,
                         'height':alto,
                         'width':ancho,
@@ -300,16 +302,16 @@ class record_status(models.Model):
                         })
 
                 product = self.env['product.product'].search([('barcode','=',code)])
-                _logger.info("===============>product %r" % product)
+                # _logger.info("===============>product %r" % product)
                 product_dic = {
                     'barcode':code,
                     'name':titulo,
                     'type':'product',
                     'list_price':precioSIVA,
                     'standard_price':precioSIVA,
-                    'sale_ok':disponibilidad,
-                    'purchase_ok':disponibilidad,
-                    'website_published':disponibilidad,
+                    'sale_ok':disp_venta,
+                    'purchase_ok':disp_compra,
+                    'website_published':disp_web,
                     'weight':peso,
                     ###Estructura para los datos en el menu variants
                     'fecha_publicacion_ok':public_date,
@@ -371,9 +373,9 @@ class record_status(models.Model):
                 if product:
                     product_dic = {
                         'barcode':code,
-                        'sale_ok':disponibilidad,
-                        'purchase_ok':disponibilidad,
-                        'website_published':disponibilidad
+                        'sale_ok':disp_venta,
+                        'purchase_ok':disp_compra,
+                        'website_published':disp_web
                     }
                     producto = product.update(product_dic)
 

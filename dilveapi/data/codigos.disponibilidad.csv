@@ -1,7 +1,7 @@
 codigo,descripcion,vender,comprar,web
 1,Cancelado después de haber sido anunciado,0,0,0
 9,No disponible todavía. pospuesto indefinidamente,0,0,0
-10,No disponible todavía. Se debe indicar fecha prevista de disponibilidad.,0,0,0
+10,No disponible todavía. Se debe indicar fecha prevista de disponibilidad.,0,1,1
 11,En espera de stock. Requiere una fecha prevista. Se utiliza fundamentalmente para pedidos al extranjero.,0,0,0
 12,No disponible todavía. Se publicará solo en impresión bajo demanda (POD).,0,0,0
 20,Disponible. Sin especificar detalles.,1,1,1
