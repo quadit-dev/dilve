@@ -89,16 +89,7 @@ class record_status(models.Model):
                     self.env['deleted.records'].delete_record(code)
                 else:
                     record = self.env['product.template'].search([('barcode','=',code)])
-                    res = self.get_record(code)
-                    
-        #return {
-        #    'type': 'ir.actions.act_window',
-        #    'res_model': 'record.status',
-        #    'view_mode': 'form',
-        #    'view_type': 'form',
-        #    'res_id': self.id,
-        #    'views': [(False, 'form')]
-        #}
+                    res = self.get_record(code, nPublisher)
 
     @api.multi
     def get_status(self,from_date,rtype,publisher,to_date=None,country=None):
@@ -117,7 +108,7 @@ class record_status(models.Model):
         return res
 
     @api.multi
-    def get_record(self,code):
+    def get_record(self, code, publisher):
         titulo = precioSIVA = precioSIVA = precio = public_date = disp_venta = disp_compra = disp_web = descripcion = cover_image = False
         autorD = editorialD = num_pag = alto = ancho = grueso = num_edicion = lugar_edicion = img = False
         code = code
@@ -335,30 +326,36 @@ class record_status(models.Model):
                 if product:
                     producto = product.update(product_dic)
                 else:
-                    producto = product.create(product_dic)
-                    rules = self.env['stock.warehouse.orderpoint']
-                    rule = {
-                        'name':'OP/00110',
-                        'product_id':int(producto),
-                        'product_min_qty':'0',
-                        'product_max_qty':'0',
-                        'qty_multiple':'1',
-                        'warehouse_id':'1',
-                        'location_id':'12',
-                        'active':True,
-                        'lead_days':'1',
-                        'lead_type':'supplier'
-                    }
-                    orderpoint = rules.create(rule)
-
-                    prov = self.publisher.partner_id
+                    # _logger.info("===============>publisher %r" % publisher)
+                    prov = self.env['codigos.editoriales'].search([('codigo', '=', publisher)])
                     if prov:
+                        # _logger.info("===============>code %r" % code)
+                        product_dic.update({
+                            'categ_id':int(prov.category)
+                        })
+                        producto = product.create(product_dic)
+
+                        rules = self.env['stock.warehouse.orderpoint']
+                        rule = {
+                            'name':'OP/00110',
+                            'product_id':int(producto),
+                            'product_min_qty':'0',
+                            'product_max_qty':'0',
+                            'qty_multiple':'1',
+                            'warehouse_id':'1',
+                            'location_id':'12',
+                            'active':True,
+                            'lead_days':'1',
+                            'lead_type':'supplier'
+                        }
+                        orderpoint = rules.create(rule)
+
                         product_template = self.env['product.template'].search([('barcode','=',code)])
                         supplier = self.env['product.supplierinfo']
                         seller = {
                             'product_tmpl_id': int(product_template),
                             'product_id': int(producto),
-                            'name': int(prov),
+                            'name': int(prov.partner_id),
                             'product_uom': 1,
                             'sequence': 1,
                             'company_id': 1,
@@ -367,7 +364,10 @@ class record_status(models.Model):
                             'min_qty': 0,
                             'price': precioSIVA
                         }
+                        # _logger.info("===============>seller %r" % seller)
                         proveedor = supplier.create(seller)
+                    else:
+                        producto = product.create(product_dic)
             else:
                 product = self.env['product.template'].search([('barcode','=',code)])
                 if product:

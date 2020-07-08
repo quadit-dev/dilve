@@ -29,17 +29,19 @@ class deleted_records(models.Model):
         disponibilidad = False
         products = self.env['product.product'].search([('barcode','=',code)])
         if products:
-            # _logger.info("===============>code %r" % code)
-            registro = self.env['deleted.records'].create({
-                'isbn':code,
-                'title':products.name,
-                'autor':products.autor,
-                'editorial':products.editorial
-            })
-            product = self.env['product.product'].search([('barcode','=',code)])
-            product_dic = {
-                'sale_ok':disponibilidad,
-                'purchase_ok':disponibilidad,
-                'website_published':disponibilidad
-            }
-            producto = product.update(product_dic)
+            products_deleted = self.env['deleted.records'].search([('isbn','=',code)])
+            if not products_deleted:
+                # _logger.info("===============>code %r" % code)
+                registro = self.env['deleted.records'].create({
+                    'isbn':code,
+                    'title':products.name,
+                    'autor':products.autor,
+                    'editorial':products.editorial
+                })
+                product = self.env['product.product'].search([('barcode','=',code)])
+                product_dic = {
+                    'sale_ok':disponibilidad,
+                    'purchase_ok':disponibilidad,
+                    'website_published':disponibilidad
+                }
+                producto = product.update(product_dic)

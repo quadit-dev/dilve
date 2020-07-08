@@ -41,11 +41,11 @@ class request_status(models.Model):
         fdate = today-timedelta(days=self.days)
         formato = "%Y-%m-%d"
         from_date = datetime.strftime(fdate, formato)
-        _logger.info("===============>from_date %r" % from_date)
+        # _logger.info("===============>from_date %r" % from_date)
         publisher_id = self.env['codigos.editoriales'].search([('partner_id', '!=', False)])
 
         for publisher in publisher_id:
-            _logger.info("=========================================================>publisher %r" % publisher.nombre)
+            # _logger.info("=========================================================>publisher %r" % publisher.nombre)
             news_records = self.env['record.status'].get_status(from_date,'N',publisher.codigo)
             if news_records.status_code == 200:
                 new_record = parseString(news_records.text)
@@ -53,7 +53,7 @@ class request_status(models.Model):
                 for new_code in news_codes:
                     codigoisbn = new_code.getElementsByTagName("id")[0]
                     code = str(codigoisbn.firstChild.data)
-                    self.env['record.status'].get_record(code)
+                    self.env['record.status'].get_record(code, publisher.codigo)
 
             changed_records = self.env['record.status'].get_status(from_date,'C',publisher.codigo)
             if changed_records.status_code == 200:
@@ -62,7 +62,7 @@ class request_status(models.Model):
                 for change_code in changed_codes:
                     codigoisbn = change_code.getElementsByTagName("id")[0]
                     code = str(codigoisbn.firstChild.data)
-                    self.env['record.status'].get_record(code)
+                    self.env['record.status'].get_record(code, publisher.codigo)
 
             deleted_records = self.env['record.status'].get_status(from_date,'D',publisher.codigo)
             if deleted_records.status_code == 200:
@@ -72,3 +72,5 @@ class request_status(models.Model):
                     codigoisbn = delete_code.getElementsByTagName("id")[0]
                     code = str(codigoisbn.firstChild.data)
                     self.env['deleted.records'].delete_record(code)
+                    
+        _logger.info("====================================================================>Finaliza DILVE")
