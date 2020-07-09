@@ -328,29 +328,29 @@ class record_status(models.Model):
                 else:
                     # _logger.info("===============>publisher %r" % publisher)
                     prov = self.env['codigos.editoriales'].search([('codigo', '=', publisher)])
-                    if prov:
-                        # _logger.info("===============>code %r" % code)
-                        if prov.category:
-                            product_dic.update({
-                                'categ_id':int(prov.category)
-                            })
-                        producto = product.create(product_dic)
+                    # _logger.info("===============>code %r" % code)
+                    if prov.category:
+                        product_dic.update({
+                            'categ_id':int(prov.category)
+                        })
+                    producto = product.create(product_dic)
 
-                        rules = self.env['stock.warehouse.orderpoint']
-                        rule = {
-                            'name':'OP/00110',
-                            'product_id':int(producto),
-                            'product_min_qty':'0',
-                            'product_max_qty':'0',
-                            'qty_multiple':'1',
-                            'warehouse_id':'1',
-                            'location_id':'12',
-                            'active':True,
-                            'lead_days':'1',
-                            'lead_type':'supplier'
-                        }
-                        orderpoint = rules.create(rule)
+                    rules = self.env['stock.warehouse.orderpoint']
+                    rule = {
+                        'name':'OP/00110',
+                        'product_id':int(producto),
+                        'product_min_qty':'0',
+                        'product_max_qty':'0',
+                        'qty_multiple':'1',
+                        'warehouse_id':'1',
+                        'location_id':'12',
+                        'active':True,
+                        'lead_days':'1',
+                        'lead_type':'supplier'
+                    }
+                    orderpoint = rules.create(rule)
 
+                    if prov.partner_id:
                         product_template = self.env['product.template'].search([('barcode','=',code)])
                         supplier = self.env['product.supplierinfo']
                         seller = {
