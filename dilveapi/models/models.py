@@ -330,9 +330,10 @@ class record_status(models.Model):
                     prov = self.env['codigos.editoriales'].search([('codigo', '=', publisher)])
                     if prov:
                         # _logger.info("===============>code %r" % code)
-                        product_dic.update({
-                            'categ_id':int(prov.category)
-                        })
+                        if prov.category:
+                            product_dic.update({
+                                'categ_id':int(prov.category)
+                            })
                         producto = product.create(product_dic)
 
                         rules = self.env['stock.warehouse.orderpoint']
