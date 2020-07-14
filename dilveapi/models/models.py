@@ -108,7 +108,7 @@ class record_status(models.Model):
         return res
 
     @api.multi
-    def get_record(self, code, publisher):
+    def get_record(self, code, publisher=None):
         titulo = precioSIVA = precioSIVA = precio = public_date = disp_venta = disp_compra = disp_web = descripcion = cover_image = False
         autorD = editorialD = num_pag = alto = ancho = grueso = num_edicion = lugar_edicion = img = False
         code = code
