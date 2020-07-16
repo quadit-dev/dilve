@@ -119,6 +119,7 @@
         <field name="type">tree</field>
         <field name="arch" type="xml">
             <tree string="Libros cancelados">
+				<field name="create_date"/>
             	<field name="isbn"/>
 				<field name="title"/>
 				<field name="autor"/>

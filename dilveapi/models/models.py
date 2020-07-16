@@ -128,8 +128,10 @@ class record_status(models.Model):
                 if producto[0] == "B":
                     serie = dato.getElementsByTagName("Series")
                     if serie:
-                        titles = len(dato.getElementsByTagName("TitleText"))
-                        titulo = dato.getElementsByTagName("TitleText")[titles-1]
+                        titles = dato.getElementsByTagName("TitleType")
+                        titletype = len([title.firstChild.data for title in titles if title.firstChild.data == '01'])
+                        _logger.info("===============>titletype %r" % titletype)
+                        titulo = dato.getElementsByTagName("TitleText")[titletype-1]
                     else:
                         titulo = dato.getElementsByTagName("TitleText")[0]
                     titulo = ustr(titulo.firstChild.data)
@@ -151,12 +153,16 @@ class record_status(models.Model):
                         precioSIVA = ustr(precioSIVA.firstChild.data)
                     else:
                         precioSIVA = 0
-                    edit = dato.getElementsByTagName("ImprintName")
+                    
+                    edit = dato.getElementsByTagName("Publisher")
                     if edit:
-                        editorialD = dato.getElementsByTagName("ImprintName")[0]
+                        editorialD = dato.getElementsByTagName("PublisherName")[0]
                         editorialD = ustr(editorialD.firstChild.data)
+                        code_editorial = dato.getElementsByTagName("NameCodeValue")[0]
+                        code_editorial = ustr(code_editorial.firstChild.data)
                     else:
                         editorialD = ""
+                        code_editorial = ""
                     page = dato.getElementsByTagName("NumberOfPages")
                     if page:
                         num_pag = dato.getElementsByTagName("NumberOfPages")[0]
@@ -323,22 +329,26 @@ class record_status(models.Model):
                     product_dic.update({
                         'image_medium':base64.encodestring(cover_image)
                     })
+
+                if not publisher:
+                    publisher = code_editorial
+
+                prov = self.env['codigos.editoriales'].search([('codigo', '=', publisher)])
+                if prov.category:
+                    product_dic.update({
+                        'categ_id':int(prov.category)
+                    })
+
                 if product:
                     producto = product.update(product_dic)
                 else:
-                    # _logger.info("===============>publisher %r" % publisher)
-                    prov = self.env['codigos.editoriales'].search([('codigo', '=', publisher)])
-                    # _logger.info("===============>code %r" % code)
-                    if prov.category:
-                        product_dic.update({
-                            'categ_id':int(prov.category)
-                        })
                     producto = product.create(product_dic)
 
-                    rules = self.env['stock.warehouse.orderpoint']
+                rules = self.env['stock.warehouse.orderpoint']
+                if not rules.search([('product_id', '=', product.id)]):
                     rule = {
                         'name':'OP/00110',
-                        'product_id':int(producto),
+                        'product_id':int(product.id),
                         'product_min_qty':'0',
                         'product_max_qty':'0',
                         'qty_multiple':'1',
@@ -350,12 +360,13 @@ class record_status(models.Model):
                     }
                     orderpoint = rules.create(rule)
 
+                supplier = self.env['product.supplierinfo']
+                if not supplier.search([('product_id', '=', product.id)]):
                     if prov.partner_id:
                         product_template = self.env['product.template'].search([('barcode','=',code)])
-                        supplier = self.env['product.supplierinfo']
                         seller = {
                             'product_tmpl_id': int(product_template),
-                            'product_id': int(producto),
+                            'product_id': int(product),
                             'name': int(prov.partner_id),
                             'product_uom': 1,
                             'sequence': 1,
@@ -365,10 +376,7 @@ class record_status(models.Model):
                             'min_qty': 0,
                             'price': precioSIVA
                         }
-                        # _logger.info("===============>seller %r" % seller)
                         proveedor = supplier.create(seller)
-                    else:
-                        producto = product.create(product_dic)
             else:
                 product = self.env['product.template'].search([('barcode','=',code)])
                 if product:

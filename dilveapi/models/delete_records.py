@@ -19,6 +19,7 @@ class deleted_records(models.Model):
     _name = 'deleted.records'
     _description = 'Modelo para manejar las bajas de los libros.'
 
+    create_date = fields.Datetime('Fecha de creación', readonly=True)
     isbn = fields.Char('ISBN', size=13, readonly=True)
     title = fields.Char('Título', size=128, readonly=True)
     autor = fields.Char('Autor', size=128, readonly=True)
