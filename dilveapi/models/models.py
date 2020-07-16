@@ -130,7 +130,6 @@ class record_status(models.Model):
                     if serie:
                         titles = dato.getElementsByTagName("TitleType")
                         titletype = len([title.firstChild.data for title in titles if title.firstChild.data == '01'])
-                        _logger.info("===============>titletype %r" % titletype)
                         titulo = dato.getElementsByTagName("TitleText")[titletype-1]
                     else:
                         titulo = dato.getElementsByTagName("TitleText")[0]
@@ -341,14 +340,16 @@ class record_status(models.Model):
 
                 if product:
                     producto = product.update(product_dic)
+                    produ = product
                 else:
                     producto = product.create(product_dic)
+                    produ = producto
 
                 rules = self.env['stock.warehouse.orderpoint']
-                if not rules.search([('product_id', '=', product.id)]):
+                if not rules.search([('product_id', '=', produ.id)]):
                     rule = {
                         'name':'OP/00110',
-                        'product_id':int(product.id),
+                        'product_id':int(produ.id),
                         'product_min_qty':'0',
                         'product_max_qty':'0',
                         'qty_multiple':'1',
@@ -361,12 +362,12 @@ class record_status(models.Model):
                     orderpoint = rules.create(rule)
 
                 supplier = self.env['product.supplierinfo']
-                if not supplier.search([('product_id', '=', product.id)]):
+                if not supplier.search([('product_id', '=', produ.id)]):
                     if prov.partner_id:
                         product_template = self.env['product.template'].search([('barcode','=',code)])
                         seller = {
                             'product_tmpl_id': int(product_template),
-                            'product_id': int(product),
+                            'product_id': int(produ.id),
                             'name': int(prov.partner_id),
                             'product_uom': 1,
                             'sequence': 1,
