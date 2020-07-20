@@ -392,10 +392,15 @@ class record_status(models.Model):
     @api.multi
     def cover_image(self, url, code):
         try:
-            data = urlopen(url).read()
-            file = StringIO(data)
-            image = Image.open(file)
-            image.save('/tmp/imagen.jpg')
+            #_logger.info("===============>url %r" % url)
+            data = requests.get(url)
+            with open("/tmp/imagen.jpg", "wb") as codes:
+                codes.write(data.content)
+            #_logger.info("===============>codes %r" % codes)
+            #data = urlopen(url).read()
+            #file = StringIO(data)
+            #image = Image.open(file)
+            #image.save('/tmp/imagen.jpg')
             return True
         except Exception:
             post_vars = {'subject': 'Mensaje', 'body': _('El siguiente código presento error, reviselo manualmente. %r' % str(code)), }  # noqa
