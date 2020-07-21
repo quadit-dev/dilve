@@ -324,10 +324,6 @@ class record_status(models.Model):
                     'texto_resumen':descripcion,
                     'lugar_edicion':lugar_edicion
                     }
-                if cover_image:
-                    product_dic.update({
-                        'image_medium':base64.encodestring(cover_image)
-                    })
 
                 if not publisher:
                     publisher = code_editorial
@@ -344,6 +340,12 @@ class record_status(models.Model):
                 else:
                     producto = product.create(product_dic)
                     produ = producto
+
+                try:
+                    if cover_image:
+                        producto = product.update({'image_medium':base64.encodestring(cover_image)})
+                except Exception:
+                    return False
 
                 rules = self.env['stock.warehouse.orderpoint']
                 if not rules.search([('product_id', '=', produ.id)]):
@@ -396,14 +398,9 @@ class record_status(models.Model):
             data = requests.get(url)
             with open("/tmp/imagen.jpg", "wb") as codes:
                 codes.write(data.content)
-            #_logger.info("===============>codes %r" % codes)
-            #data = urlopen(url).read()
-            #file = StringIO(data)
-            #image = Image.open(file)
-            #image.save('/tmp/imagen.jpg')
             return True
         except Exception:
-            post_vars = {'subject': 'Mensaje', 'body': _('El siguiente código presento error, reviselo manualmente. %r' % str(code)), }  # noqa
+            post_vars = {'subject': 'Mensaje', 'body': _('El siguiente código presento error, reviselo manualmente. %r' % str(code)), }
             self.message_post(type="notification", subtype="mt_comment", **post_vars)
             return False
 
