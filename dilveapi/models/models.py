@@ -105,6 +105,7 @@ class record_status(models.Model):
             "country":country
             }
         res = requests.get(url, params=paramsapi)
+        print(res.text)
         return res
 
     @api.multi
@@ -192,6 +193,9 @@ class record_status(models.Model):
                                     cover_image = files.read()
                             else:
                                 url_resource = "http://www.dilve.es/dilve/dilve/getResourceX.do?user="+ datos_id.user + "&password=" + datos_id.password + "&identifier=" + code + "&resource=" + url_image
+                                print("==================>")
+                                print (url_resource)
+                                print("==================>")
                                 img = self.cover_image(url_resource,code)
                                 if img==True:
                                     files = open('/tmp/imagen.jpg', 'r+')
@@ -300,6 +304,7 @@ class record_status(models.Model):
                 product = self.env['product.product'].search([('barcode','=',code)])
                 # _logger.info("===============>product %r" % product)
                 product_dic = {
+                    'image_medium':base64.encodestring(cover_image),
                     'barcode':code,
                     'name':titulo,
                     'type':'product',
@@ -309,6 +314,7 @@ class record_status(models.Model):
                     'purchase_ok':disp_compra,
                     'website_published':disp_web,
                     'weight':peso,
+                    
                     ###Estructura para los datos en el menu variants
                     'fecha_publicacion_ok':public_date,
                     'titulo_lang':titulo,
