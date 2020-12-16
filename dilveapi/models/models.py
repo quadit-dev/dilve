@@ -111,7 +111,7 @@ class record_status(models.Model):
     @api.multi
     def get_record(self, code, publisher=None):
         titulo = precioSIVA = precioSIVA = precio = public_date = disp_venta = disp_compra = disp_web = descripcion = cover_image = False
-        autorD = editorialD = num_pag = alto = ancho = grueso = num_edicion = lugar_edicion = img = False
+        autorD = editorialD = num_pag = alto = ancho = grueso = num_edicion = lugar_edicion = des_autor = img = False
         code = code
         datos = self.env['config.usuario']
         datos_id = datos.search([])
@@ -120,8 +120,12 @@ class record_status(models.Model):
             params = {"user":datos_id.user, 
             "password":datos_id.password, 
             "identifier":code})
+        
         if dataRecords.status_code == 200:
             informacion = parseString(dataRecords.content)
+            print("================================>")
+            print(informacion)
+            print("================================>") 
             datos = informacion.getElementsByTagName("Product")
             for dato in datos:
                 producto = dato.getElementsByTagName("ProductForm")[0]
@@ -169,6 +173,15 @@ class record_status(models.Model):
                         num_pag = ustr(num_pag.firstChild.data)
                     else:
                         num_pag = 0
+                    #===================>
+                    des_autor = dato.getElementsByTagName("BiographicalNote")
+                    if des_autor:
+                        des_autor = dato.getElementsByTagName("BiographicalNote")[0]
+                        des_autor = ustr(des_autor.firstChild.data)
+                        #print(des_autor)
+                    else:
+                        des_autor = ""    
+                    #===================>
                     descrip = dato.getElementsByTagName("Text")
                     if descrip:
                         descripcion = dato.getElementsByTagName("Text")[0]
@@ -302,7 +315,7 @@ class record_status(models.Model):
                         })
 
                 product = self.env['product.product'].search([('barcode','=',code)])
-                # _logger.info("===============>product %r" % product)
+                _logger.info("===============>product %r" % product)
                 product_dic = {
                     'image_medium':base64.encodestring(cover_image),
                     'barcode':code,
@@ -314,11 +327,15 @@ class record_status(models.Model):
                     'purchase_ok':disp_compra,
                     'website_published':disp_web,
                     'weight':peso,
+                    'description_sale': '\nAutor: '+ autorD + '\nEditorial: '+ editorialD + '\nNumero de paginas: ' + num_pag,
+                    'description_purchase': descripcion,
+
                     
                     ###Estructura para los datos en el menu variants
                     'fecha_publicacion_ok':public_date,
                     'titulo_lang':titulo,
                     'autor':autorD,
+                    'descripcion_autor':des_autor,
                     'isbn_13':code,
                     'editorial':editorialD,
                     'numero_paginas':num_pag,
