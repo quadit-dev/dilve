@@ -327,8 +327,9 @@ class record_status(models.Model):
                     'purchase_ok':disp_compra,
                     'website_published':disp_web,
                     'weight':peso,
-                    'description_sale': '\nAutor: '+ autorD + '\nEditorial: '+ editorialD + '\nNumero de paginas: ' + num_pag,
-                    'description_purchase': descripcion,
+                    #campos para concatenar Woo
+                    #'description_sale': '\nAutor: '+ autorD + '\nEditorial: '+ editorialD + '\nNumero de paginas: ' + num_pag,
+                    #'description_purchase': descripcion,
 
                     
                     ###Estructura para los datos en el menu variants
